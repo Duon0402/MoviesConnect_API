@@ -3,6 +3,7 @@ using API.Entities;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PagedList;
 
 namespace API.Controllers
 {
@@ -24,12 +25,20 @@ namespace API.Controllers
             _movieRepository.CreateMovie(movie);
             return Ok(movie);
         }
+
         [HttpGet("GetMovieById/{movieId}")]
         public async Task<ActionResult<Movie>> GetMovieById(int movieId)
         {
             var movie = await _movieRepository.GetMovieByIdAsync(movieId);
             if (movie == null) return NotFound();
             return Ok(movie);
+        }
+
+        [HttpGet("GetListMovies")]
+        public async Task<ActionResult<PagedList<Movie>>> GetListMovies([FromQuery] MovieInput movieInput)
+        {
+            var movies = await _movieRepository.GetListMoviesAsync(movieInput);
+            return Ok(movies);
         }
     }
 }

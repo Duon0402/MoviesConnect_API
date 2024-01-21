@@ -1,5 +1,6 @@
 ﻿using API.DTOs.Movies;
 using API.Entities;
+using API.Helpers.Pagination;
 
 namespace API.Interfaces
 {
@@ -7,7 +8,7 @@ namespace API.Interfaces
     {
         void CreateMovie(MovieDto movie);
         Task<bool> SaveAllAsync();
-        Task<IEnumerable<Movie>> GetListMoviesAsync();
+        Task<PagedResults<Movie>> GetListMoviesAsync(MovieInput movieInput);
         Task<Movie> GetMovieByIdAsync(int movieId);
     }
 }

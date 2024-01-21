@@ -1,11 +1,13 @@
 ﻿using API.Data;
 using API.DTOs.Movies;
 using API.Entities;
+using API.Helpers.Pagination;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PagedList;
 
 namespace API.Repositories
 {
@@ -27,9 +29,20 @@ namespace API.Repositories
             _dataContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Movie>> GetListMoviesAsync()
+        public async Task<PagedResults<Movie>> GetListMoviesAsync(MovieInput movieInput)
         {
-           return await _dataContext.Movies.ToListAsync();
+            var query =  _dataContext.Movies.AsQueryable();
+
+            var totalItems = await query.CountAsync();
+            var pagedMovies = query.ToPagedList(movieInput.PageNumber, movieInput.PageSize);
+
+            var result = new PagedResults<Movie>
+            {
+                TotalItems = totalItems,
+                PagedItems = pagedMovies,
+            };
+
+            return result;
         }
 
         public async Task<Movie> GetMovieByIdAsync(int movieId)
