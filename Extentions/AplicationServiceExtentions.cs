@@ -13,9 +13,10 @@ namespace API.Extentions
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration config)
         {
             // addscoped
-            services.AddScoped<LogUserActivity>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<LogUserActivity>();
             // automaper
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             // database

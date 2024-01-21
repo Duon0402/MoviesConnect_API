@@ -13,6 +13,8 @@ namespace API.Data
             : base(options)
         {
         }
+        public DbSet<Movie> Movies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
 
         {
