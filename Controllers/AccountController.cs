@@ -1,5 +1,4 @@
 ﻿using API.DTOs.Accounts;
-using API.DTOs.Users;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
@@ -26,7 +25,7 @@ namespace API.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<AccountOutputDto>> Register(RegisterDto registerDto)
         {
             if (await UserExists(registerDto.Username)) return BadRequest("Username is taken");
 
@@ -42,17 +41,18 @@ namespace API.Controllers
 
             if (!roleResult.Succeeded) return BadRequest(result.Errors);
 
-            return new UserDto
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return new AccountOutputDto
             {
                 Username = user.UserName,
-                FullName = user.FullName,
-                Gender = user.Gender,
+                Roles = roles,
                 Token = await _tokenService.CreateToken(user),
             };
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+        public async Task<ActionResult<AccountOutputDto>> Login(LoginDto loginDto)
         {
             if (string.IsNullOrEmpty(loginDto.Username))
             {
@@ -72,12 +72,12 @@ namespace API.Controllers
                 .CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded) return Unauthorized("Invalid password");
+            var roles = await _userManager.GetRolesAsync(user);
 
-            return new UserDto
+            return new AccountOutputDto
             {
                 Username = user.UserName,
-                FullName = user.FullName,
-                Gender = user.Gender,
+                Roles = roles,
                 Token = await _tokenService.CreateToken(user),
             };
         }
