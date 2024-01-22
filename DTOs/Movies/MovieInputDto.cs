@@ -2,7 +2,7 @@
 
 namespace API.DTOs.Movies
 {
-    public class MovieInput : PagedInput
+    public class MovieInputDto : PagedInput
     {
     }
 }

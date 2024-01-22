@@ -1,6 +1,6 @@
 ﻿using API.DTOs.Movies;
-using API.Entities;
-using API.Interfaces;
+using API.Entities.Movies;
+using API.Interfaces.Movies;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PagedList;
@@ -35,9 +35,9 @@ namespace API.Controllers
         }
 
         [HttpGet("GetListMovies")]
-        public async Task<ActionResult<PagedList<Movie>>> GetListMovies([FromQuery] MovieInput movieInput)
+        public async Task<ActionResult<PagedList<Movie>>> GetPagedListMovies([FromQuery] MovieInputDto movieInput)
         {
-            var movies = await _movieRepository.GetListMoviesAsync(movieInput);
+            var movies = await _movieRepository.GetPagedListMoviesAsync(movieInput);
             return Ok(movies);
         }
     }

@@ -1,4 +1,5 @@
-﻿using API.Entities;
+﻿using API.Entities.Movies;
+using API.Entities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,10 @@ namespace API.Data
             : base(options)
         {
         }
+
+        // movies
+        public DbSet<Certification> Certifications { get; set; } // chung nhan
+        public DbSet<Genre> Genres { get; set; } // the Loai
         public DbSet<Movie> Movies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

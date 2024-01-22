@@ -1,7 +1,7 @@
-﻿using API.Entities;
+﻿using API.Entities.Users;
 using API.Interfaces;
 
-namespace API.Repositories
+namespace API.Interfaces
 {
     public class UserRepository : IUserRepository
     {

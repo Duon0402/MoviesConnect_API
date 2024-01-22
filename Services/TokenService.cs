@@ -1,4 +1,4 @@
-﻿using API.Entities;
+﻿using API.Entities.Users;
 using API.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;

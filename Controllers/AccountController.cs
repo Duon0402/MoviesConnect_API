@@ -1,5 +1,5 @@
 ﻿using API.DTOs.Accounts;
-using API.Entities;
+using API.Entities.Users;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;

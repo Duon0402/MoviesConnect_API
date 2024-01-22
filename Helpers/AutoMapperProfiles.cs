@@ -1,6 +1,8 @@
 ﻿using API.DTOs.Accounts;
 using API.DTOs.Movies;
-using API.Entities;
+using API.DTOs.Movies.Certifications;
+using API.Entities.Movies;
+using API.Entities.Users;
 using AutoMapper;
 
 namespace API.Helpers
@@ -14,6 +16,7 @@ namespace API.Helpers
 
             // movies
             CreateMap<MovieDto, Movie>().ReverseMap();
+            CreateMap<CertificationDto, Certification>().ReverseMap();
         }
     }
 }
