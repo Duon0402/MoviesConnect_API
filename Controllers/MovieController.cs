@@ -34,7 +34,7 @@ namespace API.Controllers
             return Ok(movie);
         }
 
-        [HttpGet("GetListMovies")]
+        [HttpGet("GetPagedListMovies")]
         public async Task<ActionResult<PagedList<Movie>>> GetPagedListMovies([FromQuery] MovieInputDto movieInput)
         {
             var movies = await _movieRepository.GetPagedListMoviesAsync(movieInput);
