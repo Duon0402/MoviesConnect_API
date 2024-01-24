@@ -7,7 +7,7 @@ namespace API.Interfaces.Movies
         void CreateGenre();
         void UpdateGenre();
         void DeleteGenre();
-        Task<Genre> GetGenreByIdAsync(int genreId);
-        Task<Genre> GetListGenreAsync(Genre genre);
+        Task<Genre> GetGenreById(int genreId);
+        Task<Genre> GetListGenre(Genre genre);
     }
 }
