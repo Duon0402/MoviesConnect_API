@@ -46,6 +46,7 @@ namespace API.Controllers
 
             return new AccountOutputDto
             {
+                Id = user.Id,
                 Username = user.UserName,
                 Roles = roles,
                 Token = await _tokenService.CreateToken(user),
@@ -77,13 +78,14 @@ namespace API.Controllers
 
             return new AccountOutputDto
             {
+                Id = user.Id,
                 Username = user.UserName,
                 Roles = roles,
                 Token = await _tokenService.CreateToken(user),
             };
         }
 
-        // [Authorize]
+        [Authorize]
         [HttpPost("ChangePassword")]
         public async Task<ActionResult> ChangePassword(string username,
             string oldPassword,string newPassword)
