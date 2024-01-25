@@ -2,6 +2,7 @@
 using API.Entities.Users;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -82,6 +83,21 @@ namespace API.Controllers
             };
         }
 
+        // [Authorize]
+        [HttpPost("ChangePassword")]
+        public async Task<ActionResult> ChangePassword(string username,
+            string oldPassword,string newPassword)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null) return NotFound();
+
+            var checkPassword = await _userManager.CheckPasswordAsync(user, oldPassword);
+            if (!checkPassword) return BadRequest("Invalid old password");
+
+            var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            if (!result.Succeeded) return BadRequest("Password changed failed");
+            return Ok("Password changed successfully");
+        }
 
         private async Task<bool> UserExists(string username)
         {
