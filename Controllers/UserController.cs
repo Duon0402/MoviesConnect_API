@@ -1,5 +1,8 @@
-﻿using API.Entities.Users;
+﻿using API.DTOs.Users;
+using API.Entities.Users;
+using API.Extentions;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -7,24 +10,31 @@ namespace API.Controllers
     public class UserController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        [HttpGet("GetUserByUsername/{username}")]
-        public async Task<ActionResult<AppUser>> GetUserByUsername(string username)
+        [HttpGet("GetUserByUsername")]
+        public async Task<ActionResult<MemberDto>> GetUserByUsername(string username)
         {
-
-            var user = await _userRepository.GetUserByUsername(username);
-            return Ok(user);
+            return await _userRepository.GetMemberByUsername(username);
         }
-        [HttpGet("GetUserById/{userId}")]
-        public async Task<ActionResult<AppUser>> GetUserById(int userId)
+
+        [HttpGet("GetUserById")]
+        public async Task<ActionResult<MemberDto>> GetUserById(int userId)
         {
-            var user = await _userRepository.GetUserById(userId);
-            return Ok(user);
+            return await _userRepository.GetMemberById(userId);
+        }
+
+        [HttpGet("GetListUsers")]
+        public async Task<ActionResult<MemberDto>> GetListUsers()
+        {
+            var users = await _userRepository.GetListMembers();
+            return Ok(users);
         }
     }
 }

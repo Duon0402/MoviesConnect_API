@@ -1,13 +1,22 @@
-﻿using API.Entities.Users;
+﻿using API.DTOs.Users;
+using API.DTOs.Users.Member;
+using API.Entities.Users;
+using API.Helpers.Pagination;
 
 namespace API.Interfaces
 {
     public interface IUserRepository
     {
-        void Update(AppUser user);
+        // users
+        void UpdateUser(AppUser user);
         Task<bool> SaveAllAsync();
-        Task<IEnumerable<AppUser>> GetListUsers();
         Task<AppUser> GetUserById(int userId);
         Task<AppUser> GetUserByUsername(string username);
+        Task<IEnumerable<AppUser>> GetListUsers();
+
+        // members
+        Task<MemberDto> GetMemberById(int userId);
+        Task<MemberDto> GetMemberByUsername(string username);
+        Task<IEnumerable<MemberDto>> GetListMembers();
     }
 }
