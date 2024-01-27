@@ -1,12 +1,15 @@
 ﻿using API.DTOs.Users;
+using API.DTOs.Users.Member;
 using API.Entities.Users;
 using API.Extentions;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class UserController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
@@ -35,6 +38,20 @@ namespace API.Controllers
         {
             var users = await _userRepository.GetListMembers();
             return Ok(users);
+        }
+
+        [HttpPut("UpdateUser")]
+        public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+        {
+            var user = await _userRepository.GetUserByUsername(User.GetUsername());
+
+            _mapper.Map(memberUpdateDto, user);
+
+            _userRepository.UpdateUser(user);
+
+            if (await _userRepository.SaveAllAsync()) return    ();
+
+            return BadRequest("Failed to update user");
         }
     }
 }

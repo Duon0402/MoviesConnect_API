@@ -1,6 +1,6 @@
-﻿namespace API.DTOs.Users.User
+﻿namespace API.DTOs.Users.Member
 {
-    public class UserUpdateDto
+    public class MemberUpdateDto
     {
         public string FullName { get; set; }
         public string Gender { get; set; }
