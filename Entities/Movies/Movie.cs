@@ -1,18 +1,14 @@
-﻿using API.Helpers;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace API.Entities.Movies
+﻿namespace API.Entities.Movies
 {
-    public class Movie
+    public class Movie : Entity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public string Title { get; set; }
-        public string Storyline { get; set; }
+        public string Summary { get; set; }
+        public int DurationMinutes { get; set; }
         public DateTime ReleaseDate { get; set; }
+        public string Status { get; set; }
+        public int ApprovedId { get; set; }
+        public bool IsApproved { get; set; } = false;
 
         public int CertificationId { get; set; }
         public Certification Certification { get; set; }

@@ -1,4 +1,5 @@
-﻿using API.Entities.Users;
+﻿using API.Entities.Movies;
+using API.Entities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +34,22 @@ namespace API.Data
 
             await userManager.CreateAsync(admin, "D@ngDuong0402");
             await userManager.AddToRolesAsync(admin, new[] { "Admin", "Moderator" });
+        }
+
+        public static async Task SeedCertifications(DataContext context)
+        {
+            if (await context.Certifications.AnyAsync()) return;
+
+            var certifications = new List<Certification>
+            {
+                new Certification { Name = "P", Description = "Phim này phù hợp với mọi đối tượng khán giả, không giới hạn độ tuổi.", MinimumAge = 0 },
+                new Certification { Name = "C13", Description = "Khuyến cáo đối tượng khán giả trên 13 tuổi.", MinimumAge = 13 },
+                new Certification { Name = "C16", Description = "Khuyến cáo đối tượng khán giả trên 16 tuổi.", MinimumAge = 16 },
+                new Certification { Name = "C18", Description = "Phim chỉ dành cho khán giả trên 18 tuổi.", MinimumAge = 18 }
+            };
+
+            await context.Certifications.AddRangeAsync(certifications);
+            await context.SaveChangesAsync();
         }
     }
 }

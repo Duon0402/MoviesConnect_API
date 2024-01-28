@@ -1,16 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace API.Entities.Movies
+﻿namespace API.Entities.Movies
 {
-    // the loai
-    public class Genre
+    public class Genre : Entity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public string Name { get; set; }
-
         public ICollection<MovieGenre> MovieGenres { get; set; }
     }
 }

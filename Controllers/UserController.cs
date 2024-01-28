@@ -49,7 +49,7 @@ namespace API.Controllers
 
             _userRepository.UpdateUser(user);
 
-            if (await _userRepository.SaveAllAsync()) return    ();
+            if (await _userRepository.SaveAllAsync()) return NoContent();
 
             return BadRequest("Failed to update user");
         }
