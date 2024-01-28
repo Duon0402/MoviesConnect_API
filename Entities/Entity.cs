@@ -11,15 +11,13 @@ namespace API.Entities
         public int Id { get; set; }
 
         public int CreatedId { get; set; }
-        public DateTime CreateAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public int? UpdatedId { get; set; }
-        public DateTime? UpdateAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         public int? DeletedId { get; set; }
-        public DateTime? DeleteAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public ICollection<MovieGenre> MovieGenres { get; set; }
-        public Certification Certification { get; set; }
     }
 }

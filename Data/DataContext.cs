@@ -18,8 +18,9 @@ namespace API.Data
 
         // movies
         public DbSet<Movie> Movies { get; set; }
-        public DbSet<Certification> Certifications { get; set; }
-        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Genre> Genres { get; set; } // the loai
+        public DbSet<MovieGenre> MovieGenres { get; set; }
+        public DbSet<Certification> Certifications { get; set; } // chung chi
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
 
@@ -27,6 +28,23 @@ namespace API.Data
             base.OnModelCreating(modelBuilder);
 
             // movies
+            modelBuilder.Entity<MovieGenre>()
+                .HasKey(mg => new { mg.MovieId, mg.GenreId });
+
+            modelBuilder.Entity<MovieGenre>()
+                .HasOne(mg => mg.Movie)
+                .WithMany(m => m.MovieGenres)
+                .HasForeignKey(mg => mg.MovieId);
+
+            modelBuilder.Entity<MovieGenre>()
+                .HasOne(mg => mg.Genre)
+                .WithMany(g => g.MovieGenres)
+                .HasForeignKey(mg => mg.GenreId);
+
+            modelBuilder.Entity<Movie>()
+                .HasOne(m => m.Certification)
+                .WithMany(c => c.Movies)
+                .HasForeignKey(m => m.CertificationId);
 
             // users
             modelBuilder.Entity<AppUser>()

@@ -1,6 +1,5 @@
 ﻿using API.DTOs.Accounts;
-using API.DTOs.Movies;
-using API.DTOs.Movies.Certifications;
+using API.DTOs.Movies.Genre;
 using API.DTOs.Users;
 using API.DTOs.Users.Member;
 using API.Entities.Movies;
@@ -21,8 +20,7 @@ namespace API.Helpers
             CreateMap<MemberUpdateDto, AppUser>().ReverseMap();
 
             // movies
-            CreateMap<MovieDto, Movie>().ReverseMap();
-            CreateMap<CertificationDto, Certification>().ReverseMap();
+            CreateMap<GenreInputDto, Genre>().ReverseMap();
         }
     }
 }
