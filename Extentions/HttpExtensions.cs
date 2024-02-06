@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace API.Extentions
+﻿namespace API.Extentions
 {
     public static class HttpExtensions
     {

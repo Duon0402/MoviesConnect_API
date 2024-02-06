@@ -67,7 +67,6 @@ namespace API.Controllers
 
             var user = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
 
-
             if (user == null) return Unauthorized("Invalid username");
 
             var result = await _signInManager
@@ -86,17 +85,19 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpPost("ChangePassword")]
-        public async Task<ActionResult> ChangePassword(string username,
-            string oldPassword, string newPassword)
+        [HttpPut("ChangePassword")]
+        public async Task<ActionResult> ChangePassword([FromQuery] string username,
+            [FromBody] ChangePasswordDto changePassword)
         {
             var user = await _userManager.FindByNameAsync(username);
             if (user == null) return NotFound();
 
-            var checkPassword = await _userManager.CheckPasswordAsync(user, oldPassword);
+            var checkPassword = await _userManager.CheckPasswordAsync(user,
+                changePassword.CurrentPassword);
             if (!checkPassword) return BadRequest("Invalid old password");
 
-            var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            var result = await _userManager.ChangePasswordAsync(user,
+                changePassword.CurrentPassword, changePassword.NewPassword);
             if (!result.Succeeded) return BadRequest("Password changed failed");
             return Ok("Password changed successfully");
         }

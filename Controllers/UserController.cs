@@ -1,6 +1,5 @@
 ﻿using API.DTOs.Users;
 using API.DTOs.Users.Member;
-using API.Entities.Users;
 using API.Extentions;
 using API.Interfaces;
 using AutoMapper;

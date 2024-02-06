@@ -44,13 +44,14 @@ namespace API.Controllers.Movies
             [FromBody] GenreUpdateDto updateDto)
         {
             var genre = await _genreRepository.GetGenreByIdForEdit(genreId);
+            if (genre == null) return NotFound();
             genre.UpdatedId = User.GetUserId();
             genre.UpdatedAt = DateTime.Now;
 
             _mapper.Map(updateDto, genre);
             _genreRepository.UpdateGenre(genre);
 
-            if(await _genreRepository.Save()) return NoContent();
+            if (await _genreRepository.Save()) return NoContent();
 
             return BadRequest("Failed to update genre");
         }
@@ -64,7 +65,7 @@ namespace API.Controllers.Movies
             genre.IsDeleted = true;
 
             _genreRepository.DeleteGenre(genre);
-            
+
             if (await _genreRepository.Save()) return NoContent();
 
             return BadRequest("Failed to delete genre");
@@ -80,10 +81,10 @@ namespace API.Controllers.Movies
             return Ok(genre);
         }
 
-        [HttpGet("GetListGenres")]
-        public async Task<ActionResult> GetListGenres([FromBody] GenreInputDto genreInput)
+        [HttpGet("GetPagedListGenres")]
+        public async Task<ActionResult> GetPagedListGenres([FromBody] GenreInputDto genreInput)
         {
-            var genres = await _genreRepository.GetListGenres(genreInput);
+            var genres = await _genreRepository.GetPagedListGenres(genreInput);
             return Ok(genres);
         }
     }

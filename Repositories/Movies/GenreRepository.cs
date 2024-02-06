@@ -20,12 +20,13 @@ namespace API.Repositories.Movies
             _dataContext = dataContext;
             _mapper = mapper;
         }
+
         public void CreateGenre(Genre genre)
         {
             _dataContext.Add(genre);
         }
-        
-        public void DeleteGenre( Genre genre)
+
+        public void DeleteGenre(Genre genre)
         {
             _dataContext.Entry(genre).State = EntityState.Modified;
         }
@@ -50,23 +51,23 @@ namespace API.Repositories.Movies
                 .SingleOrDefaultAsync(g => g.Id == genreId && g.IsDeleted == false);
         }
 
-        //public async Task<IEnumerable<GenreOutputDto>> GetListGenres(string keyword)
-        //{
-        //    var genres = _dataContext.Genres
-        //            .OrderBy(g => g.Name)
-        //            .Where(g => g.IsDeleted == false)
-        //            .AsQueryable();
+        public async Task<IEnumerable<GenreOutputDto>> GetListGenres(string keyword)
+        {
+            var genres = _dataContext.Genres
+                    .OrderBy(g => g.Name)
+                    .Where(g => g.IsDeleted == false)
+                    .AsQueryable();
 
-        //    if (!string.IsNullOrEmpty(keyword))
-        //    {
-        //        genres = genres.Where(g => g.Name.Contains(keyword));
-        //    }
-        //    return await genres
-        //        .ProjectTo<GenreOutputDto>(_mapper.ConfigurationProvider)
-        //        .ToListAsync();
-        //}
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                genres = genres.Where(g => g.Name.Contains(keyword));
+            }
+            return await genres
+                .ProjectTo<GenreOutputDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
 
-        public async Task<PagedResults<GenreOutputDto>> GetListGenres(GenreInputDto genreInput)
+        public async Task<IPagedResult<GenreOutputDto>> GetPagedListGenres(GenreInputDto genreInput)
         {
             var query = _dataContext.Genres
                 .OrderBy(g => g.Name)
@@ -82,7 +83,7 @@ namespace API.Repositories.Movies
                 .ProjectTo<GenreOutputDto>(_mapper.ConfigurationProvider)
                 .ToPagedList(genreInput.PageNumber, genreInput.PageSize);
 
-            return new PagedResults<GenreOutputDto>
+            return new IPagedResult<GenreOutputDto>
             {
                 TotalItems = genres.Count(),
                 PagedItems = genres

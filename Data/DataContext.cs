@@ -3,7 +3,6 @@ using API.Entities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace API.Data
 {
@@ -18,6 +17,7 @@ namespace API.Data
 
         // movies
         public DbSet<Movie> Movies { get; set; }
+
         public DbSet<Genre> Genres { get; set; } // the loai
         public DbSet<MovieGenre> MovieGenres { get; set; }
         public DbSet<Certification> Certifications { get; set; } // chung chi
