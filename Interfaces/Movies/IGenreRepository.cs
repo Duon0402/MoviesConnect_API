@@ -1,4 +1,6 @@
-﻿using API.Entities.Movies;
+﻿using API.DTOs.Movies.Genres;
+using API.Entities.Movies;
+using API.Helpers.Pagination;
 
 namespace API.Interfaces.Movies
 {
@@ -7,8 +9,10 @@ namespace API.Interfaces.Movies
         void CreateGenre(Genre genre);
         void UpdateGenre(Genre genre);
         void DeleteGenre(Genre genre);
-        Task<bool> SaveAllAsync();
-        Task<Genre> GetGenreById(int genreId);
-        Task<IEnumerable<Genre>> GetListGenres();
+        Task<bool> GenreExits(string genreName);
+        Task<bool> Save();
+        Task<Genre> GetGenreByIdForEdit(int genreId);
+        Task<GenreOutputDto> GetGenreById(int genreId);
+        Task<PagedResults<GenreOutputDto>> GetListGenres(GenreInputDto genreInput);
     }
 }

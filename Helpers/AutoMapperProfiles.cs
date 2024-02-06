@@ -1,5 +1,5 @@
 ﻿using API.DTOs.Accounts;
-using API.DTOs.Movies.Genre;
+using API.DTOs.Movies.Genres;
 using API.DTOs.Users;
 using API.DTOs.Users.Member;
 using API.Entities.Movies;
@@ -19,8 +19,10 @@ namespace API.Helpers
             CreateMap<MemberDto, AppUser>().ReverseMap();
             CreateMap<MemberUpdateDto, AppUser>().ReverseMap();
 
-            // movies
-            CreateMap<GenreInputDto, Genre>().ReverseMap();
+            // genres
+            CreateMap<GenreCreateDto, Genre>().ReverseMap();
+            CreateMap<GenreOutputDto, Genre>().ReverseMap();
+            CreateMap<GenreUpdateDto, Genre>().ReverseMap();
         }
     }
 }

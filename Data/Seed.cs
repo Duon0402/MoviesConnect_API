@@ -26,7 +26,7 @@ namespace API.Data
 
             var admin = new AppUser
             {
-                UserName = "Admin",
+                UserName = "admin",
                 FullName = "Dang Truong Duong",
                 Gender = "Male",
                 DateOfBirth = new DateTime(2002, 04, 02)

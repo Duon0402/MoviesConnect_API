@@ -13,5 +13,11 @@ namespace API.Extentions
         {
             return int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         }
+
+        public static IEnumerable<string> GetRoles(this ClaimsPrincipal user)
+        {
+            var roleClaims = user.FindAll(ClaimTypes.Role);
+            return roleClaims.Select(c => c.Value);
+        }
     }
 }

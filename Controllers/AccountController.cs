@@ -88,7 +88,7 @@ namespace API.Controllers
         [Authorize]
         [HttpPost("ChangePassword")]
         public async Task<ActionResult> ChangePassword(string username,
-            string oldPassword,string newPassword)
+            string oldPassword, string newPassword)
         {
             var user = await _userManager.FindByNameAsync(username);
             if (user == null) return NotFound();

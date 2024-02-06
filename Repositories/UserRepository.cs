@@ -58,7 +58,7 @@ namespace API.Interfaces
                 .SingleOrDefaultAsync(u => u.UserName == username);
         }
 
-        public async Task<bool> SaveAllAsync()
+        public async Task<bool> Save()
         {
             return await _dataContext.SaveChangesAsync() > 0;
         }

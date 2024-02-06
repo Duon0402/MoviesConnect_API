@@ -1,4 +1,4 @@
-﻿using API.DTOs.Movies.Genre;
+﻿using API.DTOs.Movies.Genres;
 using API.Entities.Movies;
 using API.Extentions;
 using API.Interfaces.Movies;
@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Movies
 {
+    [Authorize]
     public class GenreController : BaseApiController
     {
         private readonly IGenreRepository _genreRepository;
@@ -19,68 +20,70 @@ namespace API.Controllers.Movies
             _mapper = mapper;
         }
 
-        [Authorize]
         [HttpPost("CreateGenre")]
-        public async Task<ActionResult> CreateGenre(GenreInputDto inputGenreDto)
+        public async Task<ActionResult> CreateGenre([FromBody] GenreCreateDto genreCreate)
         {
-            if (inputGenreDto == null) return BadRequest("Invalid Data");
+            if (genreCreate == null) return BadRequest();
 
-            var newGenre = new Genre()
+            if (await _genreRepository.GenreExits(genreCreate.Name)) return BadRequest("Genre already exists");
+
+            var newGenre = new Genre
             {
-                Name = inputGenreDto.Name,
                 CreatedId = User.GetUserId(),
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.Now
             };
 
+            _mapper.Map(genreCreate, newGenre);
             _genreRepository.CreateGenre(newGenre);
-            return Ok();
+
+            return NoContent();
         }
-        [Authorize]
+
         [HttpPut("UpdateGenre")]
-        public async Task<ActionResult> UpdateGenre(int genreId, GenreInputDto inputGenreDto)
+        public async Task<ActionResult> UpdateGenre([FromQuery] int genreId,
+            [FromBody] GenreUpdateDto updateDto)
         {
-            var genre = await _genreRepository.GetGenreById(genreId);
-            if (genre == null) return NotFound();
-
-            genre.UpdatedAt = DateTime.Now;
+            var genre = await _genreRepository.GetGenreByIdForEdit(genreId);
             genre.UpdatedId = User.GetUserId();
+            genre.UpdatedAt = DateTime.Now;
 
-            _mapper.Map(inputGenreDto, genre);
+            _mapper.Map(updateDto, genre);
             _genreRepository.UpdateGenre(genre);
 
-            if (await _genreRepository.SaveAllAsync()) return NoContent();
+            if(await _genreRepository.Save()) return NoContent();
+
             return BadRequest("Failed to update genre");
         }
-        [Authorize]
-        [HttpPut("DeleteGenre")]
-        public async Task<ActionResult> DeleteGenre(int genreId)
-        {
-            var genre = await _genreRepository.GetGenreById(genreId);
-            if (genre == null) return NotFound();
 
-            genre.DeletedAt = DateTime.Now;
+        [HttpDelete("DeleteGenre")]
+        public async Task<ActionResult> DeleteGenre([FromQuery] int genreId)
+        {
+            var genre = await _genreRepository.GetGenreByIdForEdit(genreId);
             genre.DeletedId = User.GetUserId();
+            genre.DeletedAt = DateTime.Now;
             genre.IsDeleted = true;
 
             _genreRepository.DeleteGenre(genre);
+            
+            if (await _genreRepository.Save()) return NoContent();
 
-            if (await _genreRepository.SaveAllAsync()) return NoContent();
             return BadRequest("Failed to delete genre");
         }
 
         [HttpGet("GetGenreById")]
-        public async Task<ActionResult<Genre>> GetGenreById(int genreId)
+        public async Task<ActionResult> GetGenreById([FromQuery] int genreId)
         {
-           var genre = await _genreRepository.GetGenreById(genreId);
-           if(genre == null) return NotFound();
-           return Ok(genre);
+            var genre = await _genreRepository.GetGenreById(genreId);
+
+            if (genre == null) return NotFound();
+
+            return Ok(genre);
         }
 
         [HttpGet("GetListGenres")]
-        public async Task<ActionResult<Genre>> GetListGenres()
+        public async Task<ActionResult> GetListGenres([FromBody] GenreInputDto genreInput)
         {
-            var genres = await _genreRepository.GetListGenres();
-            if (genres == null) return NotFound();
+            var genres = await _genreRepository.GetListGenres(genreInput);
             return Ok(genres);
         }
     }
