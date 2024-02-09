@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Movies.Genres;
+using API.DTOs.Movies.Movie;
 using API.Entities.Movies;
 using API.Helpers.Pagination;
 
@@ -23,5 +24,6 @@ namespace API.Interfaces.Movies
         Task<IEnumerable<GenreOutputDto>> GetListGenres(string keyword);
 
         Task<IPagedResult<GenreOutputDto>> GetPagedListGenres(GenreInputDto genreInput);
+        Task<IEnumerable<ListMoviesOutputDto>> GetListMoviesByGenreId(int genreId);
     }
 }

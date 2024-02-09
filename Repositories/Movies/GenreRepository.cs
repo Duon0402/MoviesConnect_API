@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.DTOs.Movies.Genres;
+using API.DTOs.Movies.Movie;
 using API.Entities.Movies;
 using API.Helpers.Pagination;
 using API.Interfaces.Movies;
@@ -48,22 +49,31 @@ namespace API.Repositories.Movies
         public async Task<Genre> GetGenreByIdForEdit(int genreId)
         {
             return await _dataContext.Genres
-                .SingleOrDefaultAsync(g => g.Id == genreId && g.IsDeleted == false);
+                .SingleOrDefaultAsync(g => g.Id == genreId);
         }
 
-        public async Task<IEnumerable<GenreOutputDto>> GetListGenres(string keyword)
+        public async Task<IEnumerable<GenreOutputDto>> GetListGenres(string? keyword)
         {
             var genres = _dataContext.Genres
                     .OrderBy(g => g.Name)
                     .Where(g => g.IsDeleted == false)
                     .AsQueryable();
 
-            if (!string.IsNullOrEmpty(keyword))
+            if (!string.IsNullOrWhiteSpace(keyword))
             {
                 genres = genres.Where(g => g.Name.Contains(keyword));
             }
             return await genres
                 .ProjectTo<GenreOutputDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ListMoviesOutputDto>> GetListMoviesByGenreId(int genreId)
+        {
+            return await _dataContext.MovieGenres
+                .Where(mg => mg.GenreId == genreId)
+                .Select(mg => mg.Movie)
+                .ProjectTo<ListMoviesOutputDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
@@ -74,7 +84,7 @@ namespace API.Repositories.Movies
                 .Where(g => g.IsDeleted == false)
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(genreInput.Keyword))
+            if (!string.IsNullOrWhiteSpace(genreInput.Keyword))
             {
                 query = query.Where(g => g.Name.Contains(genreInput.Keyword));
             }
@@ -99,5 +109,7 @@ namespace API.Repositories.Movies
         {
             _dataContext.Entry(genre).State = EntityState.Modified;
         }
+
+
     }
 }

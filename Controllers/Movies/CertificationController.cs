@@ -1,4 +1,4 @@
-﻿using API.DTOs.Movies.Certification;
+﻿using API.DTOs.Movies.Certifications;
 using API.Interfaces.Movies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,10 +23,10 @@ namespace API.Controllers.Movies
             return Ok(certi);
         }
 
-        [HttpGet("GetPagedCertifications")]
-        public async Task<ActionResult> GetPagedCertifications([FromBody] CertificationInputDto certiInput)
+        [HttpGet("GetPagedListCertifications")]
+        public async Task<ActionResult> GetPagedListCertifications([FromQuery] CertificationInputDto certiInput)
         {
-            var certis = await _certificationRepository.GetPagedCertifications(certiInput);
+            var certis = await _certificationRepository.GetPagedListCertifications(certiInput);
             return Ok(certis);
         }
     }

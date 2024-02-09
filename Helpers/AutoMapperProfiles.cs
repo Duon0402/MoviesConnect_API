@@ -1,6 +1,8 @@
 ﻿using API.DTOs.Accounts;
-using API.DTOs.Movies.Certification;
+using API.DTOs.Movies;
+using API.DTOs.Movies.Certifications;
 using API.DTOs.Movies.Genres;
+using API.DTOs.Movies.Movie;
 using API.DTOs.Users;
 using API.DTOs.Users.Member;
 using API.Entities.Movies;
@@ -13,6 +15,12 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
+            // movies 
+            CreateMap<MovieCreateDto, Movie>().ReverseMap();
+            CreateMap<MovieUpdateDto, Movie>().ReverseMap();
+            CreateMap<MovieOutputDto, Movie>().ReverseMap();
+            CreateMap<ListMoviesOutputDto, Movie>().ReverseMap();
+
             // accounts
             CreateMap<RegisterDto, AppUser>().ReverseMap();
 

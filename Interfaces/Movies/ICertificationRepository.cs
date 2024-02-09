@@ -1,4 +1,5 @@
-﻿using API.DTOs.Movies.Certification;
+﻿using API.DTOs.Movies.Certifications;
+using API.Entities.Movies;
 using API.Helpers.Pagination;
 
 namespace API.Interfaces.Movies
@@ -6,7 +7,7 @@ namespace API.Interfaces.Movies
     public interface ICertificationRepository
     {
         Task<CertificationOutputDto> GetCertificationById(int certiId);
-
-        Task<IPagedResult<CertificationOutputDto>> GetPagedCertifications(CertificationInputDto certiInput);
+        Task<Certification> GetCertificationByIdForEdit(int certiId);
+        Task<IPagedResult<CertificationOutputDto>> GetPagedListCertifications(CertificationInputDto certiInput);
     }
 }

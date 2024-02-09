@@ -1,7 +1,10 @@
 ﻿using API.Data;
-using API.DTOs.Movies;
+using API.DTOs.Movies.Certifications;
+using API.DTOs.Movies.Genres;
+using API.DTOs.Movies.Movie;
 using API.Entities.Movies;
 using API.Helpers.Pagination;
+using API.Helpers.Params.Movies;
 using API.Interfaces.Movies;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -35,7 +38,7 @@ namespace API.Repositories.Movies
             _dataContext.Entry(movie).State = EntityState.Modified;
         }
 
-        public Task<IPagedResult<MovieOutputDto>> GetListMovies(MovieInputDto movieInput)
+        public Task<IPagedResult<MovieOutputDto>> GetPagedListMovies(MovieInputDto movieInput)
         {
             var query = _dataContext.Movies
                 .Where(m => m.IsDeleted == false && m.IsApproved == true)
@@ -44,24 +47,27 @@ namespace API.Repositories.Movies
             return null;
         }
 
-        public Task<Movie> GetListMoviesForEdit(string orderBy, string purpose)
+        public async Task<Movie> GetListMoviesForEdit(MovieParams movieParams)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public async Task<MovieOutputDto> GetMovieById(int movieId)
         {
             return await _dataContext.Movies
-                .Where(m => m.Id == movieId && m.IsDeleted == false)
+                .Where(m => m.Id == movieId && m.IsDeleted == false
+                    && m.IsApproved == true)
                 .ProjectTo<MovieOutputDto>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Movie> GetMovieByIdForEdit(int movieId)
         {
             return await _dataContext.Movies
-                .Where(m => m.Id == movieId)
-                .SingleOrDefaultAsync();
+                .Include(c => c.Certification)
+                .Include(mg => mg.MovieGenres)
+                    .ThenInclude(g => g.Genre)
+                .SingleOrDefaultAsync(m => m.Id == movieId);
         }
 
         public async Task<bool> MovieExits(string movieTitle)
@@ -78,6 +84,69 @@ namespace API.Repositories.Movies
         public void UpdateMovie(Movie movie)
         {
             _dataContext.Entry(movie).State = EntityState.Modified;
+        }
+        #region GetListMovies
+        public async Task<IEnumerable<ListMoviesOutputDto>> GetListMovies(MovieParams movieParams)
+        {
+            var query = _dataContext.Movies
+                .Where(m => m.IsDeleted == false && m.IsApproved == true)
+                .AsQueryable();
+
+            // loc theo keyword
+            if(!string.IsNullOrWhiteSpace(movieParams.Keyword))
+            {
+                query = query.Where(m => m.Title.Contains(movieParams.Keyword));
+            }
+
+            // loc theo certifications
+            if (movieParams.CertificationId != null && movieParams.CertificationId.Any())
+            {
+                query = query.Where(m => movieParams.CertificationId.Any(id => id.Equals(m.CertificationId)));
+            }
+
+            //  loc theo genres
+            if (movieParams.GenreId != null && movieParams.GenreId.Any())
+            {
+                query = query.Where(m => m.MovieGenres.Any(g => movieParams.GenreId.Contains(g.GenreId)));
+            }
+
+            // loc theo status
+            if (!string.IsNullOrWhiteSpace(movieParams.Status))
+            {
+                query = query.Where(m => m.Status.Equals(movieParams.Status));
+            }
+
+            query = movieParams.OrderBy switch
+            {
+                "status" => query.OrderBy(m => m.Status),
+                "release-date" => query.OrderBy(m => m.ReleaseDate),
+                _ => query.OrderBy(m => m.Title),
+            };
+
+            var sortOrder = movieParams.SortOrder?.ToLowerInvariant();
+            if (sortOrder == "desc")
+            {
+                query = movieParams.OrderBy switch
+                {
+                    "status" => query.OrderByDescending(m => m.Status),
+                    "release-date" => query.OrderByDescending(m => m.ReleaseDate),
+                    _ => query.OrderByDescending(m => m.Title),
+                };
+            }
+
+            var movies = await query.ProjectTo<ListMoviesOutputDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return movies;
+        }
+
+        #endregion
+        public async Task<IEnumerable<GenreOutputDto>> GetListGenresByMovieId(int movieId)
+        {
+            return await _dataContext.MovieGenres
+                .Where(mg => mg.MovieId == movieId)
+                .Select(mg => mg.Genre)
+                .ProjectTo<GenreOutputDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
     }
 }

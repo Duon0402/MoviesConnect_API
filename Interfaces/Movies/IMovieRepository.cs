@@ -1,6 +1,8 @@
-﻿using API.DTOs.Movies;
+﻿using API.DTOs.Movies.Genres;
+using API.DTOs.Movies.Movie;
 using API.Entities.Movies;
 using API.Helpers.Pagination;
+using API.Helpers.Params.Movies;
 
 namespace API.Interfaces.Movies
 {
@@ -20,10 +22,11 @@ namespace API.Interfaces.Movies
 
         Task<Movie> GetMovieByIdForEdit(int movieId);
 
-        Task<Movie> GetListMoviesForEdit(string orderBy, string purpose);
+        Task<Movie> GetListMoviesForEdit(MovieParams movieParams);
 
         Task<MovieOutputDto> GetMovieById(int movieId);
-
-        Task<IPagedResult<MovieOutputDto>> GetListMovies(MovieInputDto movieInput);
+        Task<IEnumerable<ListMoviesOutputDto>> GetListMovies(MovieParams movieParams);
+        Task<IPagedResult<MovieOutputDto>> GetPagedListMovies(MovieInputDto movieInput);
+        Task<IEnumerable<GenreOutputDto>> GetListGenresByMovieId(int movieId);
     }
 }

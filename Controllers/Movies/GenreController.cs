@@ -44,7 +44,7 @@ namespace API.Controllers.Movies
             [FromBody] GenreUpdateDto updateDto)
         {
             var genre = await _genreRepository.GetGenreByIdForEdit(genreId);
-            if (genre == null) return NotFound();
+            if (genre == null || genre.IsDeleted == true) return NotFound();
             genre.UpdatedId = User.GetUserId();
             genre.UpdatedAt = DateTime.Now;
 
@@ -60,6 +60,7 @@ namespace API.Controllers.Movies
         public async Task<ActionResult> DeleteGenre([FromQuery] int genreId)
         {
             var genre = await _genreRepository.GetGenreByIdForEdit(genreId);
+            if (genre == null || genre.IsDeleted == true) return NotFound();
             genre.DeletedId = User.GetUserId();
             genre.DeletedAt = DateTime.Now;
             genre.IsDeleted = true;
@@ -82,9 +83,23 @@ namespace API.Controllers.Movies
         }
 
         [HttpGet("GetPagedListGenres")]
-        public async Task<ActionResult> GetPagedListGenres([FromBody] GenreInputDto genreInput)
+        public async Task<ActionResult> GetPagedListGenres([FromQuery] GenreInputDto genreInput)
         {
             var genres = await _genreRepository.GetPagedListGenres(genreInput);
+            return Ok(genres);
+        }
+
+        [HttpGet("GetListGenres")]
+        public async Task<ActionResult<IEnumerable<GenreOutputDto>>> GetListGenres([FromQuery] string? keyword)
+        {
+            var genres = await _genreRepository.GetListGenres(keyword);
+            return Ok(genres);
+        }
+
+        [HttpGet("GetListMoviesByGenreId")]
+        public async Task<ActionResult> GetListMoviesByGenreId([FromQuery] int genreId)
+        {
+            var genres = await _genreRepository.GetListMoviesByGenreId(genreId);
             return Ok(genres);
         }
     }

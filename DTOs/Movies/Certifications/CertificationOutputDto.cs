@@ -1,4 +1,4 @@
-﻿namespace API.DTOs.Movies.Certification
+﻿namespace API.DTOs.Movies.Certifications
 {
     public class CertificationOutputDto
     {

@@ -13,6 +13,7 @@ namespace API.Extentions
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration config)
         {
             // addscoped
+            services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<ICertificationRepository, CertificationRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

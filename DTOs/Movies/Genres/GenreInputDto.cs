@@ -4,6 +4,6 @@ namespace API.DTOs.Movies.Genres
 {
     public class GenreInputDto : IPagedInput
     {
-        public string Keyword { get; set; }
+        public string? Keyword { get; set; }
     }
 }
