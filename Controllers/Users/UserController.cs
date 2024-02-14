@@ -1,5 +1,7 @@
-﻿using API.DTOs.Users;
+﻿using API.DTOs.Photos;
+using API.DTOs.Users;
 using API.DTOs.Users.Member;
+using API.Entities.Users;
 using API.Extentions;
 using API.Interfaces;
 using AutoMapper;
@@ -13,23 +15,23 @@ namespace API.Controllers.Users
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly IPhotoRepository _photoRepository;
+        private readonly IPhotoService _photoService;
 
         public UserController(IUserRepository userRepository, IMapper mapper,
-            IPhotoRepository photoRepository)
+            IPhotoService photoService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
-            _photoRepository = photoRepository;
+            _photoService = photoService;
         }
 
-        [HttpGet("GetUserByUsername")]
+        [HttpGet("GetUserByUsername/{username}", Name = "GetUserByUsername")]
         public async Task<ActionResult<MemberDto>> GetUserByUsername(string username)
         {
             return await _userRepository.GetMemberByUsername(username);
         }
 
-        [HttpGet("GetUserById")]
+        [HttpGet("GetUserById/{userId}")]
         public async Task<ActionResult<MemberDto>> GetUserById(int userId)
         {
             return await _userRepository.GetMemberById(userId);
@@ -55,5 +57,59 @@ namespace API.Controllers.Users
 
             return BadRequest("Failed to update user");
         }
+        #region SetAvatar
+        [HttpPost("SetAvatar")]
+        public async Task<ActionResult<AvatarDto>> SetAvatar(IFormFile file)
+        {
+            var user = await _userRepository.GetUserByUsername(User.GetUsername());
+
+            if(user.Avatar.PublicId != null || user.Avatar.PublicId != "default_avatar")
+            {
+                await _photoService.DeletePhoto(user.Avatar.PublicId);
+            }
+
+            var result = await _photoService.AddPhoto(file);
+
+            if (result.Error != null) return BadRequest(result.Error.Message);
+
+            var avatar = new Avatar
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId,
+                AppUserId = user.Id,
+            };
+
+            user.Avatar = avatar;
+
+            if (await _userRepository.Save())
+            {
+                return CreatedAtRoute("GetUserByUsername", new { username = user.UserName }, _mapper.Map<AvatarDto>(avatar));
+            }
+
+            return BadRequest("Problem addding photo");
+        }
+        #endregion
+
+        #region DeleteAvatar
+        [HttpDelete("DeleteAvatar")]
+        public async Task<ActionResult> DeleteAvatar()
+        {
+            var user = await _userRepository.GetUserByUsername(User.GetUsername());
+
+            var avatar = user.Avatar;
+            if (avatar == null) return NotFound();
+
+            if (avatar.PublicId != null)
+            {
+                var result = await _photoService.DeletePhoto(avatar.PublicId);
+                if (result.Error != null) return BadRequest(result.Error.Message);
+            }
+            user.Avatar = null;
+
+            if (await _userRepository.Save()) return Ok();
+
+            return BadRequest("Failed to delete the photo");
+        }
+        #endregion
     }
 }

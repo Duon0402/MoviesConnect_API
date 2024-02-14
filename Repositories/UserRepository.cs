@@ -27,7 +27,9 @@ namespace API.Interfaces
 
         public async Task<IEnumerable<AppUser>> GetListUsers()
         {
-            return await _dataContext.Users.ToListAsync();
+            return await _dataContext.Users
+                .Include(a => a.Avatar)
+                .ToListAsync();
         }
 
         public Task<MemberDto> GetMemberById(int userId)
@@ -49,12 +51,14 @@ namespace API.Interfaces
         public async Task<AppUser> GetUserById(int userId)
         {
             return await _dataContext.Users
+                .Include(a => a.Avatar)
                 .SingleOrDefaultAsync(u => u.Id == userId);
         }
 
         public async Task<AppUser> GetUserByUsername(string username)
         {
             return await _dataContext.Users
+                .Include(a => a.Avatar)
                 .SingleOrDefaultAsync(u => u.UserName == username);
         }
 

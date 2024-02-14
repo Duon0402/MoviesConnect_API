@@ -3,6 +3,7 @@ using API.DTOs.Movies.Movie;
 using API.Entities.Movies;
 using API.Extentions;
 using API.Helpers.Params.Movies;
+using API.Interfaces;
 using API.Interfaces.Movies;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -15,13 +16,18 @@ namespace API.Controllers.Movies
     {
         private readonly IMovieRepository _movieRepository;
         private readonly IMapper _mapper;
+        private readonly IPhotoService _photoService;
+        private readonly IRatingRepository _ratingRepository;
 
-        public MovieController(IMovieRepository movieRepository, IMapper mapper)
+        public MovieController(IMovieRepository movieRepository, IMapper mapper,
+            IPhotoService photoService, IRatingRepository ratingRepository)
         {
             _movieRepository = movieRepository;
             _mapper = mapper;
+            _photoService = photoService;
+            _ratingRepository = ratingRepository;
         }
-
+        #region CreateMovie
         [HttpPost("CreateMovie")]
         public async Task<ActionResult> CreateMovie([FromBody] MovieCreateDto movieCreate)
         {
@@ -30,14 +36,23 @@ namespace API.Controllers.Movies
             if (movieCreate == null) return BadRequest("Invalid data");
             if (await _movieRepository.MovieExits(movieCreate.Title)) return BadRequest("Movie already exists");
 
+            var banner = new Banner
+            {
+                PublicId = "default_banner",
+                Url = "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+            };
+            
             var newMovie = new Movie()
             {
                 CreatedId = User.GetUserId(),
                 CreatedAt = DateTime.Now,
                 CertificationId = movieCreate.CertificationId,
+                Banner = banner,
                 MovieGenres = movieCreate.GenreIds
-                    .Select(genreId => new MovieGenre { GenreId = genreId }).ToList()
+                    .Select(genreId => new MovieGenre { GenreId = genreId }).ToList(),
             };
+
+            newMovie.Banner.MovieId = newMovie.Id;
 
             if (userRoles.Contains("Admin") || userRoles.Contains("Moderator"))
             {
@@ -49,9 +64,11 @@ namespace API.Controllers.Movies
             _movieRepository.CreateMovie(newMovie);
             return NoContent();
         }
+        #endregion
 
-        [HttpPut("ApproveMovie")]
-        public async Task<ActionResult> ApproveMovie([FromQuery] int movieId)
+        #region ApproveMovie
+        [HttpPut("ApproveMovie/{movieId}")]
+        public async Task<ActionResult> ApproveMovie(int movieId)
         {
             var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
 
@@ -66,9 +83,11 @@ namespace API.Controllers.Movies
             if(await _movieRepository.Save()) return NoContent();
             return BadRequest("Failed to approve movie");
         }
+        #endregion
 
-        [HttpPut("UpdateMovie")]
-        public async Task<ActionResult> UpdateMovie([FromQuery] int movieId,[FromBody]MovieUpdateDto movieUpdate)
+        #region UpdateMovie
+        [HttpPut("UpdateMovie/{movieId}")]
+        public async Task<ActionResult> UpdateMovie(int movieId,[FromBody]MovieUpdateDto movieUpdate)
         {
             var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
             if(movie == null || movie.IsDeleted == true) return NotFound();
@@ -89,9 +108,11 @@ namespace API.Controllers.Movies
 
             return BadRequest("Failed to update movie");
         }
+        #endregion
 
-        [HttpDelete("DeleteMovie")]
-        public async Task<ActionResult> DeleteMovie([FromQuery] int movieId)
+        #region DeleteMovie
+        [HttpDelete("DeleteMovie/{movieId}")]
+        public async Task<ActionResult> DeleteMovie(int movieId)
         {
             var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
             if (movie == null) return NotFound();
@@ -105,30 +126,41 @@ namespace API.Controllers.Movies
 
             return BadRequest("Failed to delete movie");
         }
+        #endregion
 
-        [HttpGet("GetMovieById")]
-        public async Task<ActionResult<MovieOutputDto>> GetMovieById([FromQuery] int movieId)
+        [HttpGet("GetMovieById/{movieId}")]
+        public async Task<ActionResult<MovieOutputDto>> GetMovieById(int movieId)
         {
             var movie = await _movieRepository.GetMovieById(movieId);
             if (movie == null) return NotFound();
-
+            var rating = await _ratingRepository.GetListRatings(movieId);
             movie.Genres = await _movieRepository.GetListGenresByMovieId(movieId);
-
+            movie.TotalRatings = rating.Count();
+            movie.AverageRating = rating.CalculateRatingScore();
             return Ok(movie);
         }
-
-        [HttpGet("GetListGenresByMovieId")]
-        public async Task<ActionResult<GenreOutputDto>> GetListGenresByMovieId([FromQuery] int movieId)
+        #region GetListGenresByMovieId
+        [HttpGet("GetListGenresByMovieId/{movieId}")]
+        public async Task<ActionResult<GenreOutputDto>> GetListGenresByMovieId(int movieId)
         {
             var genres = await _movieRepository.GetListGenresByMovieId(movieId);
             return Ok(genres);
         }
+        #endregion
 
+        #region GetListMovies
         [HttpGet("GetListMovies")]
-        public async Task<ActionResult<IEnumerable<MovieOutputDto>>> GetListMovies([FromQuery] MovieParams movieParams)
+        public async Task<ActionResult<IEnumerable<ListMoviesOutputDto>>> GetListMovies([FromQuery] MovieParams movieParams)
         {
             var movies = await _movieRepository.GetListMovies(movieParams);
+            foreach (var movie in movies)
+            {
+                var ratings = await _ratingRepository.GetListRatings(movie.Id);
+                movie.TotalRatings = ratings.Count();
+                movie.AverageRating = ratings.CalculateRatingScore();
+            }
             return Ok(movies);
         }
+        #endregion
     }
 }

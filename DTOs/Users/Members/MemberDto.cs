@@ -1,4 +1,6 @@
-﻿using API.Entities;
+﻿using API.DTOs.Photos;
+using API.Entities;
+using API.Entities.Users;
 
 namespace API.DTOs.Users
 {
@@ -9,5 +11,6 @@ namespace API.DTOs.Users
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public bool IsPublic { get; set; }
+        public AvatarDto Avatar { get; set; }
     }
 }

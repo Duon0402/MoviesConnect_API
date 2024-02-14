@@ -9,6 +9,7 @@ using API.Interfaces.Movies;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using API.Extentions;
 
 namespace API.Repositories.Movies
 {
@@ -54,7 +55,7 @@ namespace API.Repositories.Movies
 
         public async Task<MovieOutputDto> GetMovieById(int movieId)
         {
-            return await _dataContext.Movies
+           return await _dataContext.Movies
                 .Where(m => m.Id == movieId && m.IsDeleted == false
                     && m.IsApproved == true)
                 .ProjectTo<MovieOutputDto>(_mapper.ConfigurationProvider)
@@ -65,6 +66,7 @@ namespace API.Repositories.Movies
         {
             return await _dataContext.Movies
                 .Include(c => c.Certification)
+                .Include(r => r.Ratings)
                 .Include(mg => mg.MovieGenres)
                     .ThenInclude(g => g.Genre)
                 .SingleOrDefaultAsync(m => m.Id == movieId);
@@ -73,7 +75,7 @@ namespace API.Repositories.Movies
         public async Task<bool> MovieExits(string movieTitle)
         {
             return await _dataContext.Movies
-                .AnyAsync(m => m.Title == movieTitle);
+                .AnyAsync(m => m.Title == movieTitle && m.IsDeleted == false);
         }
 
         public async Task<bool> Save()
@@ -132,6 +134,13 @@ namespace API.Repositories.Movies
                     "release-date" => query.OrderByDescending(m => m.ReleaseDate),
                     _ => query.OrderByDescending(m => m.Title),
                 };
+            }
+
+            // so luong phim lay ra
+
+            if (movieParams.PageSize.HasValue && movieParams.PageSize > 0)
+            {
+                query = query.Take(movieParams.PageSize.Value);
             }
 
             var movies = await query.ProjectTo<ListMoviesOutputDto>(_mapper.ConfigurationProvider)

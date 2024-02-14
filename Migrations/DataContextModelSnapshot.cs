@@ -22,6 +22,33 @@ namespace API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("API.Entities.Movies.Banner", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PublicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId")
+                        .IsUnique();
+
+                    b.ToTable("Banners");
+                });
+
             modelBuilder.Entity("API.Entities.Movies.Certification", b =>
                 {
                     b.Property<int>("Id")
@@ -162,6 +189,50 @@ namespace API.Migrations
                     b.ToTable("MovieGenres");
                 });
 
+            modelBuilder.Entity("API.Entities.Movies.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("Ratings");
+                });
+
+            modelBuilder.Entity("API.Entities.Movies.Watchlist", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "AppUserId");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("Watchlists");
+                });
+
             modelBuilder.Entity("API.Entities.Users.AppRole", b =>
                 {
                     b.Property<int>("Id")
@@ -289,6 +360,33 @@ namespace API.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("API.Entities.Users.Avatar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PublicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
+
+                    b.ToTable("Avatars");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
@@ -377,6 +475,17 @@ namespace API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("API.Entities.Movies.Banner", b =>
+                {
+                    b.HasOne("API.Entities.Movies.Movie", "Movie")
+                        .WithOne("Banner")
+                        .HasForeignKey("API.Entities.Movies.Banner", "MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+                });
+
             modelBuilder.Entity("API.Entities.Movies.Movie", b =>
                 {
                     b.HasOne("API.Entities.Movies.Certification", "Certification")
@@ -407,6 +516,44 @@ namespace API.Migrations
                     b.Navigation("Movie");
                 });
 
+            modelBuilder.Entity("API.Entities.Movies.Rating", b =>
+                {
+                    b.HasOne("API.Entities.Users.AppUser", "AppUser")
+                        .WithMany("Ratings")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.Movies.Movie", "Movie")
+                        .WithMany("Ratings")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("API.Entities.Movies.Watchlist", b =>
+                {
+                    b.HasOne("API.Entities.Users.AppUser", "AppUser")
+                        .WithMany("Watchlists")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.Movies.Movie", "Movie")
+                        .WithMany("Watchlists")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Movie");
+                });
+
             modelBuilder.Entity("API.Entities.Users.AppUserRole", b =>
                 {
                     b.HasOne("API.Entities.Users.AppRole", "Role")
@@ -424,6 +571,17 @@ namespace API.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("API.Entities.Users.Avatar", b =>
+                {
+                    b.HasOne("API.Entities.Users.AppUser", "AppUser")
+                        .WithOne("Avatar")
+                        .HasForeignKey("API.Entities.Users.Avatar", "AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -474,7 +632,14 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.Movies.Movie", b =>
                 {
+                    b.Navigation("Banner")
+                        .IsRequired();
+
                     b.Navigation("MovieGenres");
+
+                    b.Navigation("Ratings");
+
+                    b.Navigation("Watchlists");
                 });
 
             modelBuilder.Entity("API.Entities.Users.AppRole", b =>
@@ -484,7 +649,14 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.Users.AppUser", b =>
                 {
+                    b.Navigation("Avatar")
+                        .IsRequired();
+
+                    b.Navigation("Ratings");
+
                     b.Navigation("UserRoles");
+
+                    b.Navigation("Watchlists");
                 });
 #pragma warning restore 612, 618
         }
