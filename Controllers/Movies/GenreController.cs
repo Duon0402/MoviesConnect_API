@@ -39,9 +39,8 @@ namespace API.Controllers.Movies
             return NoContent();
         }
 
-        [HttpPut("UpdateGenre")]
-        public async Task<ActionResult> UpdateGenre([FromQuery] int genreId,
-            [FromBody] GenreUpdateDto updateDto)
+        [HttpPut("UpdateGenre/{genreId}")]
+        public async Task<ActionResult> UpdateGenre(int genreId, [FromBody] GenreUpdateDto updateDto)
         {
             var genre = await _genreRepository.GetGenreByIdForEdit(genreId);
             if (genre == null || genre.IsDeleted == true) return NotFound();
@@ -56,8 +55,8 @@ namespace API.Controllers.Movies
             return BadRequest("Failed to update genre");
         }
 
-        [HttpDelete("DeleteGenre")]
-        public async Task<ActionResult> DeleteGenre([FromQuery] int genreId)
+        [HttpDelete("DeleteGenre/{genreId}")]
+        public async Task<ActionResult> DeleteGenre(int genreId)
         {
             var genre = await _genreRepository.GetGenreByIdForEdit(genreId);
             if (genre == null || genre.IsDeleted == true) return NotFound();
@@ -72,8 +71,8 @@ namespace API.Controllers.Movies
             return BadRequest("Failed to delete genre");
         }
 
-        [HttpGet("GetGenreById")]
-        public async Task<ActionResult> GetGenreById([FromQuery] int genreId)
+        [HttpGet("GetGenreById/{genreId}")]
+        public async Task<ActionResult> GetGenreById(int genreId)
         {
             var genre = await _genreRepository.GetGenreById(genreId);
 
@@ -96,8 +95,8 @@ namespace API.Controllers.Movies
             return Ok(genres);
         }
 
-        [HttpGet("GetListMoviesByGenreId")]
-        public async Task<ActionResult> GetListMoviesByGenreId([FromQuery] int genreId)
+        [HttpGet("GetListMoviesByGenreId/{genreId}")]
+        public async Task<ActionResult> GetListMoviesByGenreId(int genreId)
         {
             var genres = await _genreRepository.GetListMoviesByGenreId(genreId);
             return Ok(genres);

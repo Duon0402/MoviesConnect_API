@@ -12,13 +12,18 @@ namespace API.Extentions
     {
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration config)
         {
-            // addscoped
+            #region AddScoped<>
+            services.AddScoped<IRatingRepository, RatingRepository>();
+            services.AddScoped<IWatchlistRepository, WatchlistRepositoy>();
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+            services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<ICertificationRepository, CertificationRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<LogUserActivity>();
+            #endregion
             // automaper
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             // database

@@ -1,4 +1,5 @@
-﻿using API.Entities.Movies;
+﻿using API.Entities;
+using API.Entities.Movies;
 using API.Entities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

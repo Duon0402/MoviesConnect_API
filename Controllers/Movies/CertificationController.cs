@@ -15,8 +15,8 @@ namespace API.Controllers.Movies
             _certificationRepository = certificationRepository;
         }
 
-        [HttpGet("GetCertificationById")]
-        public async Task<ActionResult> GetCertificationById([FromQuery] int certiId)
+        [HttpGet("GetCertificationById/{certiId}")]
+        public async Task<ActionResult> GetCertificationById(int certiId)
         {
             var certi = await _certificationRepository.GetCertificationById(certiId);
             if (certi == null) return NotFound();
