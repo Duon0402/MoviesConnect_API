@@ -18,14 +18,17 @@ namespace API.Controllers.Movies
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IRatingRepository _ratingRepository;
+        private readonly IWatchlistRepository _watchlistRepository;
 
         public MovieController(IMovieRepository movieRepository, IMapper mapper,
-            IPhotoService photoService, IRatingRepository ratingRepository)
+            IPhotoService photoService, IRatingRepository ratingRepository,
+            IWatchlistRepository watchlistRepository)
         {
             _movieRepository = movieRepository;
             _mapper = mapper;
             _photoService = photoService;
             _ratingRepository = ratingRepository;
+            _watchlistRepository = watchlistRepository;
         }
         #region CreateMovie
         [HttpPost("CreateMovie")]
@@ -153,11 +156,13 @@ namespace API.Controllers.Movies
         public async Task<ActionResult<IEnumerable<ListMoviesOutputDto>>> GetListMovies([FromQuery] MovieParams movieParams)
         {
             var movies = await _movieRepository.GetListMovies(movieParams);
+
             foreach (var movie in movies)
             {
                 var ratings = await _ratingRepository.GetListRatings(movie.Id);
                 movie.TotalRatings = ratings.Count();
                 movie.AverageRating = ratings.CalculateRatingScore();
+                movie.IsInWatchList = await _watchlistRepository.ExistWatchlistItem(User.GetUserId(), movie.Id);
             }
             return Ok(movies);
         }

@@ -18,8 +18,7 @@ namespace API.Helpers
         {
 
             // rating
-            CreateMap<RatingCreateDto, Rating>().ReverseMap();
-            CreateMap<RatingUpdateDto, Rating>().ReverseMap();
+            CreateMap<RatingAddOrEditDto, Rating>().ReverseMap();
             CreateMap<RatingOutputDto, Rating>().ReverseMap();
 
             // photos

@@ -6,9 +6,6 @@ namespace API.Entities.Movies
 {
     public class Rating
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public int Score { get; set; }
         public string? Comment { get; set; }
 

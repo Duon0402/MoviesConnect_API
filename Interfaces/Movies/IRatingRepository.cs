@@ -9,7 +9,9 @@ namespace API.Interfaces.Movies
         void EditRating(Rating rating);
         void RemoveRating(Rating rating);
         Task<bool> Save();
-        Task<Rating> GetRatingForEdit(int ratingId);
+        Task<bool> RatingExits(int movieId, int userId);
+        Task<Rating> GetRatingForEdit(int movieId, int userId);
+        Task<RatingOutputDto> GetRating(int movieId, int userId);
         Task<IEnumerable<RatingOutputDto>> GetListRatings(int movieId);
     }
 }

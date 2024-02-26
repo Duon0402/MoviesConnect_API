@@ -41,18 +41,32 @@ namespace API.Repositories.Movies
             return await _dataContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<Rating> GetRatingForEdit(int ratingId)
+        public async Task<Rating> GetRatingForEdit(int movieId, int userId)
         {
             return await _dataContext.Ratings
-                .SingleOrDefaultAsync(r => r.Id == ratingId);
+                .SingleOrDefaultAsync(r => r.MovieId == movieId && r.AppUserId == userId);
         }
 
         public async Task<IEnumerable<RatingOutputDto>> GetListRatings(int movieId)
         {
             return await _dataContext.Ratings
-                .Where(m => m.Id == movieId)
+                .Where(m => m.MovieId == movieId)
                 .ProjectTo<RatingOutputDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<bool> RatingExits(int movieId, int userId)
+        {
+            return await _dataContext.Ratings
+                .AnyAsync(r => r.MovieId == movieId && r.AppUserId == userId);
+        }
+
+        public async Task<RatingOutputDto> GetRating(int movieId, int userId)
+        {
+            return await _dataContext.Ratings
+                .Where(r => r.MovieId == movieId && r.AppUserId == userId)
+                .ProjectTo<RatingOutputDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
         }
     }
 }

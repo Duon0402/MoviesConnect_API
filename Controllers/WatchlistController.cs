@@ -3,6 +3,7 @@ using API.Entities.Movies;
 using API.Extentions;
 using API.Interfaces;
 using API.Interfaces.Movies;
+using API.Repositories.Movies;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +16,16 @@ namespace API.Controllers
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IMovieRepository _movieRepository;
+        private readonly IRatingRepository _ratingRepository;
 
         public WatchlistController(IWatchlistRepository watchlistRepository, IMapper mapper,
-            IUserRepository userRepository, IMovieRepository movieRepository)
+            IUserRepository userRepository, IMovieRepository movieRepository, IRatingRepository ratingRepository)
         {
             _watchlistRepository = watchlistRepository;
             _mapper = mapper;
             _userRepository = userRepository;
             _movieRepository = movieRepository;
+            _ratingRepository = ratingRepository;
         }
 
         [HttpPost("AddMovieToWatchList/{movieId}")]
@@ -36,9 +39,11 @@ namespace API.Controllers
             {
                 return NotFound("Movie not found");
             }
+            var userAge = user.DateOfBirth.CalculateAge();
+            if (movie.Certification.MinimumAge > userAge) return BadRequest("Age is not enough to watch this movie.");
 
 
-            if(await  _watchlistRepository.ExistWatchlistItem(user.Id, movie.Id))
+            if (await  _watchlistRepository.ExistWatchlistItem(user.Id, movie.Id))
             {
                 return BadRequest("Movie already exists in the watchlist.");
             }
@@ -72,10 +77,17 @@ namespace API.Controllers
         }
 
         [HttpGet("GetListMoviesFromWatchlist/{userId}")]
-        public async Task<ActionResult<ListMoviesOutputDto>> GetListMoviesFromWatchlist(int userId)
+        public async Task<ActionResult<IEnumerable<ListMoviesOutputDto>>> GetListMoviesFromWatchlist(int userId)
         {
             var movies = await _watchlistRepository.GetListMoviesFromWatchList(userId);
-
+            foreach (var movie in movies)
+            {
+                movie.IsInWatchList = await _watchlistRepository.ExistWatchlistItem(User.GetUserId() ,movie.Id);
+                var ratings = await _ratingRepository.GetListRatings(movie.Id);
+                movie.TotalRatings = ratings.Count();
+                movie.AverageRating = ratings.CalculateRatingScore();
+                movie.IsInWatchList = await _watchlistRepository.ExistWatchlistItem(User.GetUserId(), movie.Id);
+            }
             return Ok(movies);
         }
     }

@@ -15,6 +15,7 @@ namespace API.DTOs.Movies.Movie
         public string Status { get; set; }
         public double AverageRating { get; set; }
         public int TotalRatings { get; set; }
+        public bool IsInWatchlist { get; set; }
         public BannerDto Banner { get; set; }
         public IEnumerable<GenreOutputDto> Genres { get; set; }
         public CertificationOutputDto Certification { get; set; }

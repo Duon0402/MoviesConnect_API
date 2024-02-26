@@ -32,6 +32,8 @@ namespace API.Data
 
             #region Ratings
             modelBuilder.Entity<Rating>()
+                .HasKey(r => new { r.MovieId, r.AppUserId });
+            modelBuilder.Entity<Rating>()
                 .HasOne(u => u.AppUser)
                 .WithMany(r => r.Ratings)
                 .HasForeignKey(u => u.AppUserId);

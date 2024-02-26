@@ -26,50 +26,60 @@ namespace API.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpPost("AddRating")]
-        public async Task<ActionResult> AddRating([FromQuery] int movieId, [FromBody] RatingCreateDto ratingCreate)
+        [HttpPost("AddOrEditRating/{movieId}")]
+        public async Task<ActionResult> AddOrEditRating(int movieId, [FromBody] RatingAddOrEditDto ratingAddOrEdit)
         {
-            if (ratingCreate == null) return BadRequest("Invalid data");
-
-            var user = await _userRepository.GetUserByUsername(User.GetUsername());
+            var user = await _userRepository.GetUserById(User.GetUserId());
             var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
+            var check = await _ratingRepository.RatingExits(movieId, user.Id);
 
-            if (movie == null || user == null) return BadRequest();
-            if (movie.IsDeleted == true || movie.IsApproved == false) return NotFound("Movie not found");
 
-            var newRating = new Rating
+            if (ratingAddOrEdit == null) return BadRequest("Invalid data");
+
+            if (check == false)
             {
-                Movie = movie,
-                AppUser = user
-            };
+                var newRating = new Rating
+                {
+                    Movie = movie,
+                    AppUser = user
+                };
 
-            _mapper.Map(ratingCreate, newRating);
-            _ratingRepository.AddRating(newRating);
-            return Ok();
+                _mapper.Map(ratingAddOrEdit, newRating);
+                _ratingRepository.AddRating(newRating);
+                return Ok();
+            }
+            else
+            {
+                var rating = await _ratingRepository.GetRatingForEdit(movie.Id, user.Id);
+                
+                _mapper.Map(ratingAddOrEdit, rating);
+                _ratingRepository.EditRating(rating);
+                if (await _ratingRepository.Save()) return Ok();
+
+                return BadRequest("Failed to edit rating");
+            }
         }
 
-        [HttpPut("EditRating")]
-        public async Task<ActionResult> EditRating([FromQuery] int ratingId, int movieId, int userId,
-            [FromBody] RatingUpdateDto ratingUpdate)
+        [HttpGet("GetRating/{movieId}")]
+        public async Task<ActionResult<RatingOutputDto>> GetRating(int movieId)
         {
-            var rating = await _ratingRepository.GetRatingForEdit(ratingId);
-
-            if (rating == null) return NotFound();
-
-            if (rating.MovieId != movieId || rating.AppUserId != userId) return BadRequest("Failed to edit rating");
-
-            _mapper.Map(ratingUpdate, rating);
-            _ratingRepository.EditRating(rating);
-            if(await _ratingRepository.Save()) return Ok();
-
-            return BadRequest("Failed to edit rating");
-        }
-
-        [HttpGet("GetListRatings")]
-        public async Task<ActionResult<IEnumerable<RatingOutputDto>>> GetListRatings([FromQuery] int movieId)
-        {
-            var result = await _ratingRepository.GetListRatings(movieId);
+            var result = await _ratingRepository.GetRating(movieId, User.GetUserId());
+            result.Username = User.GetUsername();
             return Ok(result);
+        }
+
+        [HttpGet("GetListRatings/{movieId}")]
+        public async Task<ActionResult<IEnumerable<RatingOutputDto>>> GetListRatings(int movieId)
+        {
+            var ratings = await _ratingRepository.GetListRatings(movieId);
+
+            foreach (var rating in ratings)
+            {
+                var user = await _userRepository.GetUserById(rating.AppUserId);
+                rating.Username = user.UserName;
+            }
+
+            return Ok(ratings);
         }
     }
 }
