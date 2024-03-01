@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.DTOs.Movies.Movie;
+using API.DTOs.Photos;
 using API.Entities.Movies;
 using API.Interfaces.Movies;
 using AutoMapper;
@@ -31,8 +32,18 @@ namespace API.Repositories.Movies
         {
            return await _dataContext.Watchlists
                 .Where(wl => wl.AppUserId == userId)
-                .Select(wl => wl.Movie)
-                .ProjectTo<ListMoviesOutputDto>(_mapper.ConfigurationProvider)
+                .Select(wl => new ListMoviesOutputDto
+                {
+                    Id = wl.Movie.Id,
+                    Title = wl.Movie.Title,
+                    AverageRating = _dataContext.Ratings
+                        .Where(r => r.MovieId == wl.Movie.Id)
+                        .Average(r => r.Score),
+                    TotalRatings = _dataContext.Ratings
+                        .Count(r => r.MovieId == wl.Movie.Id),
+                    IsInWatchList = true,
+                    BannerOutput = _mapper.Map<BannerDto>(wl.Movie.Banner)
+                })
                 .ToListAsync();
         }
 

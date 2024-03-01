@@ -30,7 +30,12 @@ namespace API.Data
                 UserName = "admin",
                 FullName = "Dang Truong Duong",
                 Gender = "Male",
-                DateOfBirth = new DateTime(2002, 04, 02)
+                DateOfBirth = new DateTime(2002, 04, 02),
+                Avatar = new Avatar
+                {
+                    PublicId = "default_avatar",
+                    Url = "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741814/user_yxfmyc.png"
+                }
             };
 
             await userManager.CreateAsync(admin, "D@ngDuong0402");

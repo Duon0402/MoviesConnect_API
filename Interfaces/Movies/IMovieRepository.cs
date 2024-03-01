@@ -25,7 +25,7 @@ namespace API.Interfaces.Movies
         Task<Movie> GetListMoviesForEdit(MovieParams movieParams);
 
         Task<MovieOutputDto> GetMovieById(int movieId);
-        Task<IEnumerable<ListMoviesOutputDto>> GetListMovies(MovieParams movieParams);
+        Task<IEnumerable<ListMoviesOutputDto>> GetListMovies(MovieParams movieParams, int userId);
         Task<IPagedResult<MovieOutputDto>> GetPagedListMovies(MovieInputDto movieInput);
         Task<IEnumerable<GenreOutputDto>> GetListGenresByMovieId(int movieId);
     }

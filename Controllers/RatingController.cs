@@ -72,13 +72,6 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<RatingOutputDto>>> GetListRatings(int movieId)
         {
             var ratings = await _ratingRepository.GetListRatings(movieId);
-
-            foreach (var rating in ratings)
-            {
-                var user = await _userRepository.GetUserById(rating.AppUserId);
-                rating.Username = user.UserName;
-            }
-
             return Ok(ratings);
         }
     }

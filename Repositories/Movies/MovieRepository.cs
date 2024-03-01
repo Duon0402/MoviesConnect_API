@@ -10,6 +10,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using API.Extentions;
+using API.DTOs.Photos;
 
 namespace API.Repositories.Movies
 {
@@ -88,7 +89,7 @@ namespace API.Repositories.Movies
             _dataContext.Entry(movie).State = EntityState.Modified;
         }
         #region GetListMovies
-        public async Task<IEnumerable<ListMoviesOutputDto>> GetListMovies(MovieParams movieParams)
+        public async Task<IEnumerable<ListMoviesOutputDto>> GetListMovies(MovieParams movieParams, int userId)
         {
             var query = _dataContext.Movies
                 .Where(m => m.IsDeleted == false && m.IsApproved == true)
@@ -143,8 +144,20 @@ namespace API.Repositories.Movies
                 query = query.Take(movieParams.PageSize.Value);
             }
 
-            var movies = await query.ProjectTo<ListMoviesOutputDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var movies = await query.Select(m => new ListMoviesOutputDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                AverageRating = _dataContext.Ratings
+                    .Where(r => r.MovieId == m.Id)
+                    .Average(r => r.Score),
+                TotalRatings = _dataContext.Ratings.Count(r => r.MovieId == m.Id),
+                IsInWatchList = _dataContext.Watchlists
+                    .Any(w => w.MovieId == m.Id && w.AppUserId == userId),
+                BannerOutput = _mapper.Map<BannerDto>(m.Banner),
+
+            })
+            .ToListAsync();
             return movies;
         }
 

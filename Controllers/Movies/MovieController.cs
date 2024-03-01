@@ -155,15 +155,7 @@ namespace API.Controllers.Movies
         [HttpGet("GetListMovies")]
         public async Task<ActionResult<IEnumerable<ListMoviesOutputDto>>> GetListMovies([FromQuery] MovieParams movieParams)
         {
-            var movies = await _movieRepository.GetListMovies(movieParams);
-
-            foreach (var movie in movies)
-            {
-                var ratings = await _ratingRepository.GetListRatings(movie.Id);
-                movie.TotalRatings = ratings.Count();
-                movie.AverageRating = ratings.CalculateRatingScore();
-                movie.IsInWatchList = await _watchlistRepository.ExistWatchlistItem(User.GetUserId(), movie.Id);
-            }
+            var movies = await _movieRepository.GetListMovies(movieParams, User.GetUserId());
             return Ok(movies);
         }
         #endregion

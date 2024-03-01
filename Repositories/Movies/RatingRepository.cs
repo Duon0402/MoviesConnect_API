@@ -50,8 +50,14 @@ namespace API.Repositories.Movies
         public async Task<IEnumerable<RatingOutputDto>> GetListRatings(int movieId)
         {
             return await _dataContext.Ratings
-                .Where(m => m.MovieId == movieId)
-                .ProjectTo<RatingOutputDto>(_mapper.ConfigurationProvider)
+                .Where(r => r.MovieId == movieId)
+                .Select(r => new RatingOutputDto
+                {
+                    Score = r.Score,
+                    Comment = r.Comment,
+                    AppUserId = r.AppUserId,
+                    Username = _dataContext.Users.FirstOrDefault(u => u.Id == r.AppUserId).UserName
+                })
                 .ToListAsync();
         }
 
