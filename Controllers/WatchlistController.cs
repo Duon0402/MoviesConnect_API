@@ -80,14 +80,6 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<ListMoviesOutputDto>>> GetListMoviesFromWatchlist(int userId)
         {
             var movies = await _watchlistRepository.GetListMoviesFromWatchList(userId);
-            //foreach (var movie in movies)
-            //{
-            //    movie.IsInWatchList = await _watchlistRepository.ExistWatchlistItem(User.GetUserId() ,movie.Id);
-            //    var ratings = await _ratingRepository.GetListRatings(movie.Id);
-            //    movie.TotalRatings = ratings.Count();
-            //    movie.AverageRating = ratings.CalculateRatingScore();
-            //    movie.IsInWatchList = await _watchlistRepository.ExistWatchlistItem(User.GetUserId(), movie.Id);
-            //}
             return Ok(movies);
         }
     }
