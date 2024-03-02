@@ -64,7 +64,6 @@ namespace API.Controllers
         public async Task<ActionResult<RatingOutputDto>> GetRating(int movieId)
         {
             var result = await _ratingRepository.GetRating(movieId, User.GetUserId());
-            result.Username = User.GetUsername();
             return Ok(result);
         }
 

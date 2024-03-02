@@ -102,7 +102,7 @@ namespace API.Controllers.Users
 
             var checkPassword = await _userManager.CheckPasswordAsync(user,
                 changePassword.CurrentPassword);
-            if (!checkPassword) return BadRequest("Invalid old password");
+            if (!checkPassword) return BadRequest("Invalid current password");
 
             var result = await _userManager.ChangePasswordAsync(user,
                 changePassword.CurrentPassword, changePassword.NewPassword);

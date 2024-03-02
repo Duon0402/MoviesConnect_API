@@ -96,7 +96,7 @@ namespace API.Repositories.Movies
                 .AsQueryable();
 
             // loc theo keyword
-            if(!string.IsNullOrWhiteSpace(movieParams.Keyword))
+            if (!string.IsNullOrWhiteSpace(movieParams.Keyword))
             {
                 query = query.Where(m => m.Title.Contains(movieParams.Keyword));
             }
@@ -150,12 +150,12 @@ namespace API.Repositories.Movies
                 Title = m.Title,
                 AverageRating = _dataContext.Ratings
                     .Where(r => r.MovieId == m.Id)
-                    .Average(r => r.Score),
+                    .Select(r => (double?)r.Score) // Chuyển đổi sang kiểu double nullable
+                    .Average() ?? 0, // Nếu không có giá trị, sẽ trả về 0
                 TotalRatings = _dataContext.Ratings.Count(r => r.MovieId == m.Id),
-                IsInWatchList = _dataContext.Watchlists
-                    .Any(w => w.MovieId == m.Id && w.AppUserId == userId),
+                IsInWatchList = userId != -1 ? _dataContext.Watchlists
+                    .Any(w => w.MovieId == m.Id && w.AppUserId == userId) : false,
                 BannerOutput = _mapper.Map<BannerDto>(m.Banner),
-
             })
             .ToListAsync();
             return movies;

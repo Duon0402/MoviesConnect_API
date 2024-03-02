@@ -38,7 +38,8 @@ namespace API.Repositories.Movies
                     Title = wl.Movie.Title,
                     AverageRating = _dataContext.Ratings
                         .Where(r => r.MovieId == wl.Movie.Id)
-                        .Average(r => r.Score),
+                        .Select(r => (double?)r.Score) // Chuyển đổi sang kiểu double nullable
+                        .Average() ?? 0, // Nếu không có giá trị, sẽ trả về 0
                     TotalRatings = _dataContext.Ratings
                         .Count(r => r.MovieId == wl.Movie.Id),
                     IsInWatchList = true,

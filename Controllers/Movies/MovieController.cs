@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Movies
 {
-    [Authorize]
     public class MovieController : BaseApiController
     {
         private readonly IMovieRepository _movieRepository;
@@ -31,6 +30,7 @@ namespace API.Controllers.Movies
             _watchlistRepository = watchlistRepository;
         }
         #region CreateMovie
+        [Authorize]
         [HttpPost("CreateMovie")]
         public async Task<ActionResult> CreateMovie([FromBody] MovieCreateDto movieCreate)
         {
@@ -70,6 +70,7 @@ namespace API.Controllers.Movies
         #endregion
 
         #region ApproveMovie
+        [Authorize]
         [HttpPut("ApproveMovie/{movieId}")]
         public async Task<ActionResult> ApproveMovie(int movieId)
         {
@@ -89,6 +90,7 @@ namespace API.Controllers.Movies
         #endregion
 
         #region UpdateMovie
+        [Authorize]
         [HttpPut("UpdateMovie/{movieId}")]
         public async Task<ActionResult> UpdateMovie(int movieId,[FromBody]MovieUpdateDto movieUpdate)
         {
@@ -114,6 +116,7 @@ namespace API.Controllers.Movies
         #endregion
 
         #region DeleteMovie
+        [Authorize]
         [HttpDelete("DeleteMovie/{movieId}")]
         public async Task<ActionResult> DeleteMovie(int movieId)
         {
@@ -131,6 +134,7 @@ namespace API.Controllers.Movies
         }
         #endregion
 
+        #region GetMovieById
         [HttpGet("GetMovieById/{movieId}")]
         public async Task<ActionResult<MovieOutputDto>> GetMovieById(int movieId)
         {
@@ -142,6 +146,8 @@ namespace API.Controllers.Movies
             movie.AverageRating = rating.CalculateRatingScore();
             return Ok(movie);
         }
+        #endregion
+
         #region GetListGenresByMovieId
         [HttpGet("GetListGenresByMovieId/{movieId}")]
         public async Task<ActionResult<GenreOutputDto>> GetListGenresByMovieId(int movieId)
@@ -155,7 +161,14 @@ namespace API.Controllers.Movies
         [HttpGet("GetListMovies")]
         public async Task<ActionResult<IEnumerable<ListMoviesOutputDto>>> GetListMovies([FromQuery] MovieParams movieParams)
         {
-            var movies = await _movieRepository.GetListMovies(movieParams, User.GetUserId());
+            int userId = -1;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                userId = User.GetUserId();
+            }
+
+            var movies = await _movieRepository.GetListMovies(movieParams, userId);
             return Ok(movies);
         }
         #endregion

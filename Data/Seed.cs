@@ -33,6 +33,7 @@ namespace API.Data
                 DateOfBirth = new DateTime(2002, 04, 02),
                 Avatar = new Avatar
                 {
+                    AppUserId = 1,
                     PublicId = "default_avatar",
                     Url = "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741814/user_yxfmyc.png"
                 }

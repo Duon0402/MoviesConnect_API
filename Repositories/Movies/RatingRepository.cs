@@ -69,10 +69,25 @@ namespace API.Repositories.Movies
 
         public async Task<RatingOutputDto> GetRating(int movieId, int userId)
         {
-            return await _dataContext.Ratings
-                .Where(r => r.MovieId == movieId && r.AppUserId == userId)
-                .ProjectTo<RatingOutputDto>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
+
+            var ratingDto = await _dataContext.Ratings
+                .Include(r => r.AppUser)
+                .FirstOrDefaultAsync(r => r.MovieId == movieId && r.AppUserId == userId);
+            
+            if (ratingDto == null)
+            {
+                return null;
+            }
+
+            var ratingOutputDto = new RatingOutputDto
+            {
+                Score = ratingDto.Score,
+                Comment = ratingDto.Comment,
+                AppUserId = userId,
+                Username = ratingDto.AppUser.UserName
+            };
+
+            return ratingOutputDto;
         }
     }
 }
