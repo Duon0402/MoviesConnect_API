@@ -28,8 +28,9 @@ namespace API.Repositories.Movies
         {
             _dataContext.Watchlists.Remove(watchlist);
         }
-        public async Task<IEnumerable<ListMoviesOutputDto>> GetListMoviesFromWatchList(int userId)
+        public async Task<IEnumerable<ListMoviesOutputDto>> GetListMoviesFromWatchList(int userId, int currentUserId)
         {
+
            return await _dataContext.Watchlists
                 .Where(wl => wl.AppUserId == userId)
                 .Select(wl => new ListMoviesOutputDto
@@ -42,7 +43,9 @@ namespace API.Repositories.Movies
                         .Average() ?? 0, // Nếu không có giá trị, sẽ trả về 0
                     TotalRatings = _dataContext.Ratings
                         .Count(r => r.MovieId == wl.Movie.Id),
-                    IsInWatchList = true,
+
+                    IsInWatchList = _dataContext.Watchlists
+                        .Any(x => x.MovieId == wl.Movie.Id && x.AppUserId == currentUserId),
                     BannerOutput = _mapper.Map<BannerDto>(wl.Movie.Banner)
                 })
                 .ToListAsync();

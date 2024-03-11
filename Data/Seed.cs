@@ -31,6 +31,7 @@ namespace API.Data
                 FullName = "Dang Truong Duong",
                 Gender = "Male",
                 DateOfBirth = new DateTime(2002, 04, 02),
+                IsPublic = false,
                 Avatar = new Avatar
                 {
                     AppUserId = 1,

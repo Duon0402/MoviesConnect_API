@@ -33,6 +33,8 @@ namespace API.Controllers
             var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
             var check = await _ratingRepository.RatingExits(movieId, user.Id);
 
+            var userAge = user.DateOfBirth.CalculateAge();
+            if (movie.Certification.MinimumAge > userAge) return BadRequest("Age is not enough to watch this movie.");
 
             if (ratingAddOrEdit == null) return BadRequest("Invalid data");
 

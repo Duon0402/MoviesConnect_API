@@ -57,6 +57,7 @@ namespace API.Controllers.Users
 
             return BadRequest("Failed to update user");
         }
+
         #region SetAvatar
         [HttpPost("SetAvatar")]
         public async Task<ActionResult<AvatarDto>> SetAvatar(IFormFile file)
@@ -87,28 +88,6 @@ namespace API.Controllers.Users
             }
 
             return BadRequest("Problem addding photo");
-        }
-        #endregion
-
-        #region DeleteAvatar
-        [HttpDelete("DeleteAvatar")]
-        public async Task<ActionResult> DeleteAvatar()
-        {
-            var user = await _userRepository.GetUserByUsername(User.GetUsername());
-
-            var avatar = user.Avatar;
-            if (avatar == null) return NotFound();
-
-            if (avatar.PublicId != null)
-            {
-                var result = await _photoService.DeletePhoto(avatar.PublicId);
-                if (result.Error != null) return BadRequest(result.Error.Message);
-            }
-            user.Avatar = null;
-
-            if (await _userRepository.Save()) return Ok();
-
-            return BadRequest("Failed to delete the photo");
         }
         #endregion
     }

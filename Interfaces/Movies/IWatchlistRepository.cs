@@ -8,6 +8,6 @@ namespace API.Interfaces.Movies
         void AddMovieToWatchList(Watchlist watchlist);
         void RemoveMovieFromWatchList(Watchlist watchlist);
         Task<bool> ExistWatchlistItem(int userId, int movieId);
-        Task<IEnumerable<ListMoviesOutputDto>> GetListMoviesFromWatchList(int userId);
+        Task<IEnumerable<ListMoviesOutputDto>> GetListMoviesFromWatchList(int userId, int currentUserId);
     }
 }

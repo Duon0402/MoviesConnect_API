@@ -110,6 +110,20 @@ namespace API.Controllers.Users
             return Ok();
         }
 
+        [Authorize]
+        [HttpPut("ChangeSettingAccount")]
+        public async Task<ActionResult> ChangeSettingAccount()
+        {
+            var user = await _userRepository.GetUserById(User.GetUserId());
+
+            user.IsPublic = !user.IsPublic;
+
+            _userRepository.UpdateUser(user);
+
+            if (await _userRepository.Save()) return Ok(user.IsPublic);
+
+            return BadRequest("Failed to change setting account");
+        }
         private async Task<bool> UserExists(string username)
         {
             return await _userManager.Users.AnyAsync(x => x.UserName == username.ToLower());

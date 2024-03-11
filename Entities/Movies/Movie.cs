@@ -19,8 +19,8 @@
 
         // watchlist
         public ICollection<Watchlist> Watchlists { get; set; }
-        // rating
 
+        // rating
         public ICollection<Rating> Ratings { get; set; }
     }
 }

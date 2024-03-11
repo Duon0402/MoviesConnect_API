@@ -79,7 +79,7 @@ namespace API.Controllers
         [HttpGet("GetListMoviesFromWatchlist/{userId}")]
         public async Task<ActionResult<IEnumerable<ListMoviesOutputDto>>> GetListMoviesFromWatchlist(int userId)
         {
-            var movies = await _watchlistRepository.GetListMoviesFromWatchList(userId);
+            var movies = await _watchlistRepository.GetListMoviesFromWatchList(userId, User.GetUserId());
             return Ok(movies);
         }
     }
