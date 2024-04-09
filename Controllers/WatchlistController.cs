@@ -35,7 +35,7 @@ namespace API.Controllers
             var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
 
             if (movie == null || user == null) return BadRequest();
-            if (movie.IsDeleted == true || movie.IsApproved == false)
+            if (movie.IsDeleted == true)
             {
                 return NotFound("Movie not found");
             }

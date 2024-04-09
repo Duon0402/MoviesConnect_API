@@ -1,6 +1,8 @@
 ﻿using API.DTOs.Movies.Genres;
 using API.DTOs.Movies.Movie;
+using API.DTOs.Photos;
 using API.Entities.Movies;
+using API.Entities.Users;
 using API.Extentions;
 using API.Helpers.Params.Movies;
 using API.Interfaces;
@@ -18,16 +20,18 @@ namespace API.Controllers.Movies
         private readonly IPhotoService _photoService;
         private readonly IRatingRepository _ratingRepository;
         private readonly IWatchlistRepository _watchlistRepository;
+        private readonly IRecommendMovieService _recommendMovieService;
 
         public MovieController(IMovieRepository movieRepository, IMapper mapper,
             IPhotoService photoService, IRatingRepository ratingRepository,
-            IWatchlistRepository watchlistRepository)
+            IWatchlistRepository watchlistRepository, IRecommendMovieService recommendMovieService)
         {
             _movieRepository = movieRepository;
             _mapper = mapper;
             _photoService = photoService;
             _ratingRepository = ratingRepository;
             _watchlistRepository = watchlistRepository;
+            _recommendMovieService = recommendMovieService;
         }
         #region CreateMovie
         [Authorize]
@@ -57,35 +61,9 @@ namespace API.Controllers.Movies
 
             newMovie.Banner.MovieId = newMovie.Id;
 
-            if (userRoles.Contains("Admin") || userRoles.Contains("Moderator"))
-            {
-                newMovie.ApprovedId = User.GetUserId();
-                newMovie.IsApproved = true;
-            }
-
             _mapper.Map(movieCreate, newMovie);
             _movieRepository.CreateMovie(newMovie);
             return NoContent();
-        }
-        #endregion
-
-        #region ApproveMovie
-        [Authorize]
-        [HttpPut("ApproveMovie/{movieId}")]
-        public async Task<ActionResult> ApproveMovie(int movieId)
-        {
-            var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
-
-            if (movie == null) return NotFound();
-            if (movie.IsApproved == true) return BadRequest("Movie already approved");
-
-            movie.ApprovedId = User.GetUserId();
-            movie.IsApproved = true;
-
-            _movieRepository.ApproveMovie(movie);
-
-            if(await _movieRepository.Save()) return NoContent();
-            return BadRequest("Failed to approve movie");
         }
         #endregion
 
@@ -170,6 +148,48 @@ namespace API.Controllers.Movies
 
             var movies = await _movieRepository.GetListMovies(movieParams, userId);
             return Ok(movies);
+        }
+        #endregion
+
+        #region GetListRecommendMovies
+        [Authorize]
+        [HttpGet("GetListRecommendMovies")]
+        public async Task<IEnumerable<ListMoviesOutputDto>> GetListRecommendMovies()
+        {
+            return await _recommendMovieService.GetListRecommendMovies(User.GetUserId());
+        }
+        #endregion
+
+        #region SetBanner
+        [HttpPost("SetBanner/{movieId}")]
+        public async Task<ActionResult<AvatarDto>> SetBanner(int movieId, IFormFile file)
+        {
+            var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
+
+            if (movie.Banner.PublicId != null || movie.Banner.PublicId != "default_banner")
+            {
+                await _photoService.DeletePhoto(movie.Banner.PublicId);
+            }
+
+            var result = await _photoService.AddPhoto(file);
+
+            if (result.Error != null) return BadRequest(result.Error.Message);
+
+            var banner = new Banner
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId,
+                MovieId = movieId
+            };
+
+            movie.Banner = banner;
+
+            if (await _movieRepository.Save())
+            {
+                return Ok();
+            }
+
+            return BadRequest("Problem adding photo");
         }
         #endregion
     }

@@ -21,9 +21,7 @@ namespace API.Interfaces.Movies
 
         Task<GenreOutputDto> GetGenreById(int genreId);
 
-        Task<IEnumerable<GenreOutputDto>> GetListGenres(string keyword);
-
-        Task<IPagedResult<GenreOutputDto>> GetPagedListGenres(GenreInputDto genreInput);
+        Task<IEnumerable<GenreOutputDto>> GetListGenres();
         Task<IEnumerable<ListMoviesOutputDto>> GetListMoviesByGenreId(int genreId);
     }
 }

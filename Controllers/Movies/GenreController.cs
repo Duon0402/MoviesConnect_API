@@ -81,17 +81,10 @@ namespace API.Controllers.Movies
             return Ok(genre);
         }
 
-        [HttpGet("GetPagedListGenres")]
-        public async Task<ActionResult> GetPagedListGenres([FromQuery] GenreInputDto genreInput)
-        {
-            var genres = await _genreRepository.GetPagedListGenres(genreInput);
-            return Ok(genres);
-        }
-
         [HttpGet("GetListGenres")]
-        public async Task<ActionResult<IEnumerable<GenreOutputDto>>> GetListGenres([FromQuery] string? keyword)
+        public async Task<ActionResult<IEnumerable<GenreOutputDto>>> GetListGenres()
         {
-            var genres = await _genreRepository.GetListGenres(keyword);
+            var genres = await _genreRepository.GetListGenres();
             return Ok(genres);
         }
 

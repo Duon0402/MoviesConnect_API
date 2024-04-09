@@ -10,5 +10,7 @@
         public List<int>? CertificationId { get; set; }
         public List<int>? GenreId { get; set; }
         public string? Purpose { get; set; }
+        public double? MinRating { get; set; }
+        public double? MaxRating { get; set; }
     }
 }

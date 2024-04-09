@@ -23,10 +23,10 @@ namespace API.Controllers.Movies
             return Ok(certi);
         }
 
-        [HttpGet("GetPagedListCertifications")]
-        public async Task<ActionResult> GetPagedListCertifications([FromQuery] CertificationInputDto certiInput)
+        [HttpGet("GetListCertifications")]
+        public async Task<ActionResult<IEnumerable<CertificationOutputDto>>> GetListCertifications()
         {
-            var certis = await _certificationRepository.GetPagedListCertifications(certiInput);
+            var certis = await _certificationRepository.GetListCertifications();
             return Ok(certis);
         }
     }

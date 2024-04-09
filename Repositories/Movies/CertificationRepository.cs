@@ -34,24 +34,12 @@ namespace API.Repositories.Movies
                 .SingleOrDefaultAsync(c => c.Id == certiId);
         }
 
-        public async Task<IPagedResult<CertificationOutputDto>> GetPagedListCertifications(CertificationInputDto certiInput)
+        public async Task<IEnumerable<CertificationOutputDto>> GetListCertifications()
         {
-            var query = _dataContext.Certifications.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(certiInput.Keyword))
-            {
-                query = query.Where(c => c.Name.Contains(certiInput.Keyword));
-            }
-
-            var certi = query
+            return await _dataContext.Certifications
+                .OrderBy(c => c.Id)
                 .ProjectTo<CertificationOutputDto>(_mapper.ConfigurationProvider)
-                .ToPagedList(certiInput.PageNumber, certiInput.PageSize);
-
-            return new IPagedResult<CertificationOutputDto>
-            {
-                PagedItems = certi,
-                TotalItems = certi.Count()
-            };
+                .ToListAsync();
         }
     }
 }

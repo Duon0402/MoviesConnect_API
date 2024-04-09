@@ -87,7 +87,7 @@ namespace API.Controllers.Users
                 return CreatedAtRoute("GetUserByUsername", new { username = user.UserName }, _mapper.Map<AvatarDto>(avatar));
             }
 
-            return BadRequest("Problem addding photo");
+            return BadRequest("Problem adding photo");
         }
         #endregion
     }

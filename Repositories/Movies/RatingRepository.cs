@@ -54,7 +54,7 @@ namespace API.Repositories.Movies
                 .Select(r => new RatingOutputDto
                 {
                     Score = r.Score,
-                    Comment = r.Comment,
+                    Comment = r.Review,
                     AppUserId = r.AppUserId,
                     Username = _dataContext.Users.FirstOrDefault(u => u.Id == r.AppUserId).UserName
                 })
@@ -82,7 +82,7 @@ namespace API.Repositories.Movies
             var ratingOutputDto = new RatingOutputDto
             {
                 Score = ratingDto.Score,
-                Comment = ratingDto.Comment,
+                Comment = ratingDto.Review,
                 AppUserId = userId,
                 Username = ratingDto.AppUser.UserName
             };

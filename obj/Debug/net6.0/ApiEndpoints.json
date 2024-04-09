@@ -100,18 +100,58 @@
   },
   {
     "ContainingType": "API.Controllers.Admins.AdminController",
-    "Method": "GetUsersWithRoles",
-    "RelativePath": "api/Admin/users-with-roles",
+    "Method": "GetMovie",
+    "RelativePath": "api/Admin/movie/{movieId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "username",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "movieId",
+        "Type": "System.Int32",
+        "IsRequired": true
       }
     ],
+    "ReturnTypes": [
+      {
+        "Type": "API.Entities.Movies.Movie",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "API.Controllers.Admins.AdminController",
+    "Method": "GetMovies",
+    "RelativePath": "api/Admin/movies",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[API.Entities.Movies.Movie, API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "API.Controllers.Admins.AdminController",
+    "Method": "GetUsersWithRoles",
+    "RelativePath": "api/Admin/users-with-roles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[API.DTOs.Admin.UsersWithRolesDto, API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
@@ -142,29 +182,23 @@
   },
   {
     "ContainingType": "API.Controllers.Movies.CertificationController",
-    "Method": "GetPagedListCertifications",
-    "RelativePath": "api/Certification/GetPagedListCertifications",
+    "Method": "GetListCertifications",
+    "RelativePath": "api/Certification/GetListCertifications",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
+    "Parameters": [],
+    "ReturnTypes": [
       {
-        "Name": "Keyword",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "PageNumber",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "PageSize",
-        "Type": "System.Int32",
-        "IsRequired": false
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[API.DTOs.Movies.Certifications.CertificationOutputDto, API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
-    ],
-    "ReturnTypes": []
+    ]
   },
   {
     "ContainingType": "API.Controllers.Movies.GenreController",
@@ -221,13 +255,7 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "keyword",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[API.DTOs.Movies.Genres.GenreOutputDto, API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
@@ -258,32 +286,6 @@
   },
   {
     "ContainingType": "API.Controllers.Movies.GenreController",
-    "Method": "GetPagedListGenres",
-    "RelativePath": "api/Genre/GetPagedListGenres",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Keyword",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "PageNumber",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "PageSize",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Movies.GenreController",
     "Method": "UpdateGenre",
     "RelativePath": "api/Genre/UpdateGenre/{genreId}",
     "HttpMethod": "PUT",
@@ -298,22 +300,6 @@
       {
         "Name": "updateDto",
         "Type": "API.DTOs.Movies.Genres.GenreUpdateDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Movies.MovieController",
-    "Method": "ApproveMovie",
-    "RelativePath": "api/Movie/ApproveMovie/{movieId}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "movieId",
-        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -424,8 +410,38 @@
         "Name": "Purpose",
         "Type": "System.String",
         "IsRequired": false
+      },
+      {
+        "Name": "MinRating",
+        "Type": "System.Nullable\u00601[[System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "MaxRating",
+        "Type": "System.Nullable\u00601[[System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[API.DTOs.Movies.Movie.ListMoviesOutputDto, API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "API.Controllers.Movies.MovieController",
+    "Method": "GetListRecommendMovies",
+    "RelativePath": "api/Movie/GetListRecommendMovies",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[API.DTOs.Movies.Movie.ListMoviesOutputDto, API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
@@ -455,6 +471,37 @@
     "ReturnTypes": [
       {
         "Type": "API.DTOs.Movies.Movie.MovieOutputDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "API.Controllers.Movies.MovieController",
+    "Method": "SetBanner",
+    "RelativePath": "api/Movie/SetBanner/{movieId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "movieId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "API.DTOs.Photos.AvatarDto",
         "MediaTypes": [
           "text/plain",
           "application/json",

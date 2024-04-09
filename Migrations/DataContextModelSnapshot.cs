@@ -57,9 +57,24 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeletedId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("MinimumAge")
                         .HasColumnType("int");
@@ -67,6 +82,12 @@ namespace API.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -119,9 +140,6 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ApprovedId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CertificationId")
                         .HasColumnType("int");
 
@@ -139,9 +157,6 @@ namespace API.Migrations
 
                     b.Property<int>("DurationMinutes")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -197,7 +212,10 @@ namespace API.Migrations
                     b.Property<int>("AppUserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Comment")
+                    b.Property<bool>("IsSpoil")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Review")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Score")
@@ -223,6 +241,46 @@ namespace API.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Watchlists");
+                });
+
+            modelBuilder.Entity("API.Entities.Report", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HandlerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HandlingTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ObjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ObjectType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ReportTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ReporterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("API.Entities.Users.AppRole", b =>

@@ -49,23 +49,16 @@ namespace API.Repositories.Movies
         public async Task<Genre> GetGenreByIdForEdit(int genreId)
         {
             return await _dataContext.Genres
-                .SingleOrDefaultAsync(g => g.Id == genreId);
+                .SingleOrDefaultAsync(g => g.Id == genreId && g.IsDeleted == false);
         }
 
-        public async Task<IEnumerable<GenreOutputDto>> GetListGenres(string? keyword)
+        public async Task<IEnumerable<GenreOutputDto>> GetListGenres()
         {
-            var genres = _dataContext.Genres
+            return await _dataContext.Genres
                     .OrderBy(g => g.Name)
                     .Where(g => g.IsDeleted == false)
-                    .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(keyword))
-            {
-                genres = genres.Where(g => g.Name.Contains(keyword));
-            }
-            return await genres
-                .ProjectTo<GenreOutputDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                    .ProjectTo<GenreOutputDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
         }
 
         public async Task<IEnumerable<ListMoviesOutputDto>> GetListMoviesByGenreId(int genreId)
@@ -75,29 +68,6 @@ namespace API.Repositories.Movies
                 .Select(mg => mg.Movie)
                 .ProjectTo<ListMoviesOutputDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
-        }
-
-        public async Task<IPagedResult<GenreOutputDto>> GetPagedListGenres(GenreInputDto genreInput)
-        {
-            var query = _dataContext.Genres
-                .OrderBy(g => g.Name)
-                .Where(g => g.IsDeleted == false)
-                .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(genreInput.Keyword))
-            {
-                query = query.Where(g => g.Name.Contains(genreInput.Keyword));
-            }
-
-            var genres = query
-                .ProjectTo<GenreOutputDto>(_mapper.ConfigurationProvider)
-                .ToPagedList(genreInput.PageNumber, genreInput.PageSize);
-
-            return new IPagedResult<GenreOutputDto>
-            {
-                TotalItems = genres.Count(),
-                PagedItems = genres
-            };
         }
 
         public async Task<bool> Save()

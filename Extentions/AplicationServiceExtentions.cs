@@ -2,6 +2,7 @@
 using API.Helpers;
 using API.Interfaces;
 using API.Interfaces.Movies;
+using API.Repositories;
 using API.Repositories.Movies;
 using API.Services;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,8 @@ namespace API.Extentions
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration config)
         {
             #region AddScoped<>
+            services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IRecommendMovieService, RecommendMovieService>();
             services.AddScoped<IRatingRepository, RatingRepository>();
             services.AddScoped<IWatchlistRepository, WatchlistRepositoy>();
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));

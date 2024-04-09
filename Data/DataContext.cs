@@ -1,4 +1,5 @@
-﻿using API.Entities.Movies;
+﻿using API.Entities;
+using API.Entities.Movies;
 using API.Entities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace API.Data
         }
 
         #region DbSet<>
+        public DbSet<Report> Reports { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Watchlist> Watchlists { get; set; }
         public DbSet<Avatar> Avatars { get; set; }

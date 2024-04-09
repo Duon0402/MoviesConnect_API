@@ -8,6 +8,6 @@ namespace API.Interfaces.Movies
     {
         Task<CertificationOutputDto> GetCertificationById(int certiId);
         Task<Certification> GetCertificationByIdForEdit(int certiId);
-        Task<IPagedResult<CertificationOutputDto>> GetPagedListCertifications(CertificationInputDto certiInput);
+        Task<IEnumerable<CertificationOutputDto>> GetListCertifications();
     }
 }

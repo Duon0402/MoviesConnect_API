@@ -40,25 +40,16 @@ namespace API.Repositories.Movies
             _dataContext.Entry(movie).State = EntityState.Modified;
         }
 
-        public Task<IPagedResult<MovieOutputDto>> GetPagedListMovies(MovieInputDto movieInput)
+        public async Task<IEnumerable<Movie>> GetListMoviesForEdit()
         {
-            var query = _dataContext.Movies
-                .Where(m => m.IsDeleted == false && m.IsApproved == true)
-                .AsQueryable();
-
-            return null;
-        }
-
-        public async Task<Movie> GetListMoviesForEdit(MovieParams movieParams)
-        {
-            return null;
+            return await _dataContext.Movies.Where(m => m.IsDeleted == false)
+                .ToListAsync();
         }
 
         public async Task<MovieOutputDto> GetMovieById(int movieId)
         {
            return await _dataContext.Movies
-                .Where(m => m.Id == movieId && m.IsDeleted == false
-                    && m.IsApproved == true)
+                .Where(m => m.Id == movieId && m.IsDeleted == false)
                 .ProjectTo<MovieOutputDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
         }
@@ -66,6 +57,7 @@ namespace API.Repositories.Movies
         public async Task<Movie> GetMovieByIdForEdit(int movieId)
         {
             return await _dataContext.Movies
+                .Include(b => b.Banner)
                 .Include(c => c.Certification)
                 .Include(r => r.Ratings)
                 .Include(mg => mg.MovieGenres)
@@ -92,33 +84,43 @@ namespace API.Repositories.Movies
         public async Task<IEnumerable<ListMoviesOutputDto>> GetListMovies(MovieParams movieParams, int userId)
         {
             var query = _dataContext.Movies
-                .Where(m => m.IsDeleted == false && m.IsApproved == true)
+                .Where(m => m.IsDeleted == false)
                 .AsQueryable();
 
-            // loc theo keyword
+            // Filter by keyword
             if (!string.IsNullOrWhiteSpace(movieParams.Keyword))
             {
                 query = query.Where(m => m.Title.Contains(movieParams.Keyword));
             }
 
-            // loc theo certifications
+            // Filter by certifications
             if (movieParams.CertificationId != null && movieParams.CertificationId.Any())
             {
                 query = query.Where(m => movieParams.CertificationId.Any(id => id.Equals(m.CertificationId)));
             }
 
-            //  loc theo genres
+            // Filter by genres
             if (movieParams.GenreId != null && movieParams.GenreId.Any())
             {
                 query = query.Where(m => m.MovieGenres.Any(g => movieParams.GenreId.Contains(g.GenreId)));
             }
 
-            // loc theo status
+            // Filter by status
             if (!string.IsNullOrWhiteSpace(movieParams.Status))
             {
                 query = query.Where(m => m.Status.Equals(movieParams.Status));
             }
 
+            // Filter by rating range
+            if (movieParams.MinRating.HasValue && movieParams.MaxRating.HasValue)
+            {
+                query = query.Where(m => _dataContext.Ratings
+                    .Where(r => r.MovieId == m.Id)
+                    .Select(r => (double?)r.Score)
+                    .Any(score => score >= movieParams.MinRating && score <= movieParams.MaxRating));
+            }
+
+            // Sorting
             query = movieParams.OrderBy switch
             {
                 "status" => query.OrderBy(m => m.Status),
@@ -126,8 +128,7 @@ namespace API.Repositories.Movies
                 _ => query.OrderBy(m => m.Title),
             };
 
-            var sortOrder = movieParams.SortOrder?.ToLowerInvariant();
-            if (sortOrder == "desc")
+            if (movieParams.SortOrder?.ToLowerInvariant() == "desc")
             {
                 query = movieParams.OrderBy switch
                 {
@@ -137,8 +138,7 @@ namespace API.Repositories.Movies
                 };
             }
 
-            // so luong phim lay ra
-
+            // Limit number of movies returned
             if (movieParams.PageSize.HasValue && movieParams.PageSize > 0)
             {
                 query = query.Take(movieParams.PageSize.Value);
@@ -150,14 +150,15 @@ namespace API.Repositories.Movies
                 Title = m.Title,
                 AverageRating = _dataContext.Ratings
                     .Where(r => r.MovieId == m.Id)
-                    .Select(r => (double?)r.Score) // Chuyển đổi sang kiểu double nullable
-                    .Average() ?? 0, // Nếu không có giá trị, sẽ trả về 0
+                    .Select(r => (double?)r.Score)
+                    .Average() ?? 0,
                 TotalRatings = _dataContext.Ratings.Count(r => r.MovieId == m.Id),
                 IsInWatchList = userId != -1 ? _dataContext.Watchlists
                     .Any(w => w.MovieId == m.Id && w.AppUserId == userId) : false,
                 BannerOutput = _mapper.Map<BannerDto>(m.Banner),
             })
             .ToListAsync();
+
             return movies;
         }
 

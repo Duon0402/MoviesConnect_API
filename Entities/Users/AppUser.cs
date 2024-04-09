@@ -14,5 +14,6 @@ namespace API.Entities.Users
         public Avatar Avatar { get; set; }
         public ICollection<Rating> Ratings { get; set; }
         public ICollection<Watchlist> Watchlists { get; set; }
+
     }
 }
