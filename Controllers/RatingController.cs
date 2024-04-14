@@ -1,6 +1,7 @@
 ﻿using API.DTOs.Movies.Ratings;
 using API.Entities.Movies;
 using API.Extentions;
+using API.Helpers.Params;
 using API.Interfaces;
 using API.Interfaces.Movies;
 using AutoMapper;
@@ -70,9 +71,9 @@ namespace API.Controllers
         }
 
         [HttpGet("GetListRatings/{movieId}")]
-        public async Task<ActionResult<IEnumerable<RatingOutputDto>>> GetListRatings(int movieId)
+        public async Task<ActionResult<IEnumerable<RatingOutputDto>>> GetListRatings(int movieId, [FromQuery] RatingParams ratingParams)
         {
-            var ratings = await _ratingRepository.GetListRatings(movieId);
+            var ratings = await _ratingRepository.GetListRatings(movieId, ratingParams);
             return Ok(ratings);
         }
     }

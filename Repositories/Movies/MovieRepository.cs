@@ -96,7 +96,7 @@ namespace API.Repositories.Movies
             // Filter by certifications
             if (movieParams.CertificationId != null && movieParams.CertificationId.Any())
             {
-                query = query.Where(m => movieParams.CertificationId.Any(id => id.Equals(m.CertificationId)));
+                query = query.Where(m => movieParams.CertificationId.Contains(m.CertificationId));
             }
 
             // Filter by genres
@@ -111,15 +111,6 @@ namespace API.Repositories.Movies
                 query = query.Where(m => m.Status.Equals(movieParams.Status));
             }
 
-            // Filter by rating range
-            if (movieParams.MinRating.HasValue && movieParams.MaxRating.HasValue)
-            {
-                query = query.Where(m => _dataContext.Ratings
-                    .Where(r => r.MovieId == m.Id)
-                    .Select(r => (double?)r.Score)
-                    .Any(score => score >= movieParams.MinRating && score <= movieParams.MaxRating));
-            }
-
             // Sorting
             query = movieParams.OrderBy switch
             {
@@ -128,7 +119,8 @@ namespace API.Repositories.Movies
                 _ => query.OrderBy(m => m.Title),
             };
 
-            if (movieParams.SortOrder?.ToLowerInvariant() == "desc")
+            if (!string.IsNullOrWhiteSpace(movieParams.SortOrder) &&
+                movieParams.SortOrder == "desc")
             {
                 query = movieParams.OrderBy switch
                 {
@@ -144,7 +136,7 @@ namespace API.Repositories.Movies
                 query = query.Take(movieParams.PageSize.Value);
             }
 
-            var movies = await query.Select(m => new ListMoviesOutputDto
+            var query2 = query.Select(m => new ListMoviesOutputDto
             {
                 Id = m.Id,
                 Title = m.Title,
@@ -156,8 +148,32 @@ namespace API.Repositories.Movies
                 IsInWatchList = userId != -1 ? _dataContext.Watchlists
                     .Any(w => w.MovieId == m.Id && w.AppUserId == userId) : false,
                 BannerOutput = _mapper.Map<BannerDto>(m.Banner),
-            })
-            .ToListAsync();
+            });
+
+            query2 = movieParams.OrderBy switch
+            {
+                "score" => query2.OrderBy(m => m.AverageRating),
+                _ => query2.OrderByDescending(m => m.Title),
+            };
+
+            if (!string.IsNullOrWhiteSpace(movieParams.SortOrder) &&
+                movieParams.SortOrder == "desc")
+            {
+                query2 = movieParams.OrderBy switch
+                {
+                    "score" => query2.OrderByDescending(m => m.AverageRating),
+                     _ => query2.OrderByDescending(m => m.Title),
+                };
+            }
+
+            // Filter by rating range
+            if (movieParams.MinRating.HasValue && movieParams.MaxRating.HasValue)
+            {
+                query2 = query2.Where(m => m.AverageRating >= movieParams.MinRating && m.AverageRating <= movieParams.MaxRating);
+            }
+
+            var movies = await query2.ToListAsync();
+
 
             return movies;
         }

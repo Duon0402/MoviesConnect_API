@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Movies
 {
-    [Authorize]
+
     public class GenreController : BaseApiController
     {
         private readonly IGenreRepository _genreRepository;
@@ -19,7 +19,7 @@ namespace API.Controllers.Movies
             _genreRepository = genreRepository;
             _mapper = mapper;
         }
-
+        [Authorize]
         [HttpPost("CreateGenre")]
         public async Task<ActionResult> CreateGenre([FromBody] GenreCreateDto genreCreate)
         {
@@ -38,7 +38,7 @@ namespace API.Controllers.Movies
 
             return NoContent();
         }
-
+        [Authorize]
         [HttpPut("UpdateGenre/{genreId}")]
         public async Task<ActionResult> UpdateGenre(int genreId, [FromBody] GenreUpdateDto updateDto)
         {
@@ -54,7 +54,7 @@ namespace API.Controllers.Movies
 
             return BadRequest("Failed to update genre");
         }
-
+        [Authorize]
         [HttpDelete("DeleteGenre/{genreId}")]
         public async Task<ActionResult> DeleteGenre(int genreId)
         {

@@ -1,4 +1,5 @@
-﻿using API.Entities;
+﻿using API.DTOs.Reports;
+using API.Entities;
 using API.Helpers.Params;
 
 namespace API.Interfaces
@@ -9,6 +10,6 @@ namespace API.Interfaces
         void UpdateReportStatus(Report report);
         Task<bool> Save();
         Task<Report> GetReport(int reportId);
-        Task<IEnumerable<Report>> GetListReports(ReportParams reportParams);
+        Task<IEnumerable<ReportDto>> GetListReports(ReportParams reportParams);
     }
 }

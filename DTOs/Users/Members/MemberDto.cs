@@ -11,7 +11,7 @@ namespace API.DTOs.Users
         public string FullName { get; set; }
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public bool IsPublic { get; set; }
+        public bool IsPrivate { get; set; }
         public AvatarDto Avatar { get; set; }
     }
 }

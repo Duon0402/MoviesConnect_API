@@ -20,24 +20,24 @@ namespace API.Services
         }
         public async Task<IEnumerable<ListMoviesOutputDto>> GetListRecommendMovies(int userId)
         {
+            if (userId == 0 || userId == null) return null;
+
             var user = await _userRepository.GetMemberById(userId);
             var userAge = user.DateOfBirth.CalculateAge();
 
             var userRatedMovieIds = await GetUserRatedMovieIds(userId);
             var userWatchedMovieIds = await GetUserWatchedMovieIds(userId);
 
-            var recommendedMovies = await _dataContext.Movies
+            var query =  _dataContext.Movies
                 .Include(r => r.Ratings)
                 .Include(c => c.Certification)
                 .Include(wl => wl.Watchlists)
                 .Include(b => b.Banner)
                 .Where(m => m.IsDeleted == false)
-                .Where(m => !userRatedMovieIds.Contains(m.Id)) // Loại bỏ phim đã được người dùng đánh giá
-                .Where(m => !userWatchedMovieIds.Contains(m.Id)) // Loại bỏ phim đã xem
                 .Where(m => m.Certification.MinimumAge <= userAge) // Lấy các phim phù hợp với tuổi của người dùng
                 .OrderByDescending(m => m.Ratings.Count) // Sắp xếp theo tổng lượt đánh giá từ cao đến thấp
                 .ThenByDescending(m => m.Ratings.Average(r => r.Score)) // Tiếp tục sắp xếp theo điểm trung bình từ cao đến thấp
-                .Take(10) // Lấy 10 phim hàng đầu
+                .ThenByDescending(m => m.ReleaseDate)
                 .Select(m => new ListMoviesOutputDto
                 {
                     Id = m.Id,
@@ -50,9 +50,19 @@ namespace API.Services
                     },
                     IsInWatchList = userWatchedMovieIds.Contains(m.Id),
                     TotalRatings = m.Ratings.Count
-                })
-                .ToListAsync();
+                }).AsQueryable();
 
+            if (userWatchedMovieIds.Any())
+            {
+                query = query.Where(m => !userWatchedMovieIds.Contains(m.Id)); // Loại bỏ phim đã xem
+            }
+
+            if (userRatedMovieIds.Any())
+            {
+                query = query.Where(m => !userRatedMovieIds.Contains(m.Id)); // Loại bỏ phim đã được người dùng đánh giá
+            }
+
+            var recommendedMovies = await query.Take(10).ToListAsync();
             return recommendedMovies;
         }
 

@@ -4,8 +4,10 @@ using API.DTOs.Movies.Genres;
 using API.DTOs.Movies.Movie;
 using API.DTOs.Movies.Ratings;
 using API.DTOs.Photos;
+using API.DTOs.Reports;
 using API.DTOs.Users;
 using API.DTOs.Users.Member;
+using API.Entities;
 using API.Entities.Movies;
 using API.Entities.Users;
 using AutoMapper;
@@ -16,6 +18,8 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
+            // report
+            CreateMap<Report, ReportDto>().ReverseMap();
 
             // rating
             CreateMap<RatingAddOrEditDto, Rating>().ReverseMap();

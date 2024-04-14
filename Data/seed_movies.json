@@ -1,0 +1,801 @@
+﻿[
+  {
+    "Title": "The Shawshank Redemption",
+    "Summary": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+    "DurationMinutes": 142,
+    "ReleaseDate": "1994-10-14",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 7 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The Godfather",
+    "Summary": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+    "DurationMinutes": 175,
+    "ReleaseDate": "1972-03-24",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 7 },
+      { "GenreId": 15 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The Dark Knight",
+    "Summary": "When the menace known as The Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+    "DurationMinutes": 152,
+    "ReleaseDate": "2008-07-18",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 7 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Inception",
+    "Summary": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+    "DurationMinutes": 148,
+    "ReleaseDate": "2010-07-16",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 3 },
+      { "GenreId": 7 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Pulp Fiction",
+    "Summary": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+    "DurationMinutes": 154,
+    "ReleaseDate": "1994-10-14",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 7 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Dune",
+    "Summary": "Paul Atreides, a brilliant and gifted young man born into a great destiny beyond his understanding, must travel to the most dangerous planet in the universe to ensure the future of his family and his people.",
+    "DurationMinutes": 155,
+    "ReleaseDate": "2021-10-21",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 7 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "No Time to Die",
+    "Summary": "James Bond has left active service. His peace is short-lived when Felix Leiter, an old friend from the CIA, turns up asking for help, leading Bond onto the trail of a mysterious villain armed with dangerous new technology.",
+    "DurationMinutes": 163,
+    "ReleaseDate": "2021-09-28",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 7 },
+      { "GenreId": 9 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Black Widow",
+    "Summary": "Natasha Romanoff confronts the darker parts of her ledger when a dangerous conspiracy with ties to her past arises.",
+    "DurationMinutes": 134,
+    "ReleaseDate": "2021-07-07",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 7 },
+      { "GenreId": 8 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Venom: Let There Be Carnage",
+    "Summary": "Eddie Brock attempts to reignite his career by interviewing serial killer Cletus Kasady, who becomes the host of the symbiote Carnage and escapes prison after a failed execution.",
+    "DurationMinutes": 97,
+    "ReleaseDate": "2021-09-30",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 7 },
+      { "GenreId": 8 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Jungle Cruise",
+    "Summary": "Dr. Lily Houghton enlists the aid of wisecracking skipper Frank Wolff to take her down the Amazon in his dilapidated boat. Together, they search for an ancient tree that holds the power to heal – a discovery that will change the future of medicine.",
+    "DurationMinutes": 127,
+    "ReleaseDate": "2021-07-30",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 2 },
+      { "GenreId": 7 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Shang-Chi and the Legend of the Ten Rings",
+    "Summary": "Shang-Chi, the master of unarmed weaponry-based Kung Fu, is forced to confront his past after being drawn into the Ten Rings organization.",
+    "DurationMinutes": 132,
+    "ReleaseDate": "2021-09-01",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 7 },
+      { "GenreId": 8 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Mortal Kombat",
+    "Summary": "MMA fighter Cole Young seeks out Earth's greatest champions in order to stand against the enemies of Outworld in a high-stakes battle for the universe.",
+    "DurationMinutes": 110,
+    "ReleaseDate": "2021-04-08",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 7 },
+      { "GenreId": 14 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Space Jam: A New Legacy",
+    "Summary": "Basketball superstar LeBron James teams up with Bugs Bunny and the rest of the Looney Tunes for this long-awaited sequel.",
+    "DurationMinutes": 115,
+    "ReleaseDate": "2021-07-14",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 3 },
+      { "GenreId": 7 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Luca",
+    "Summary": "On the Italian Riviera, an unlikely but strong friendship grows between a human being and a sea monster disguised as a human.",
+    "DurationMinutes": 95,
+    "ReleaseDate": "2021-06-17",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 3 },
+      { "GenreId": 7 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Cruella",
+    "Summary": "A live-action prequel feature film following a young Cruella de Vil.",
+    "DurationMinutes": 134,
+    "ReleaseDate": "2021-05-26",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 7 },
+      { "GenreId": 15 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Interstellar",
+    "Summary": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+    "DurationMinutes": 169,
+    "ReleaseDate": "2014-11-07",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 3 },
+      { "GenreId": 7 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The Social Network",
+    "Summary": "As Harvard student Mark Zuckerberg creates the social networking site that would become known as Facebook, he is sued by the twins who claimed he stole their idea, and by the co-founder who was later squeezed out of the business.",
+    "DurationMinutes": 120,
+    "ReleaseDate": "2010-10-01",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 4 },
+      { "GenreId": 7 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The Grand Budapest Hotel",
+    "Summary": "A writer encounters the owner of an aging high-class hotel, who tells him of his early years serving as a lobby boy in the hotel's glorious years under an exceptional concierge.",
+    "DurationMinutes": 99,
+    "ReleaseDate": "2014-03-28",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 7 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "La La Land",
+    "Summary": "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future.",
+    "DurationMinutes": 128,
+    "ReleaseDate": "2016-12-09",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 6 },
+      { "GenreId": 7 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Mad Max: Fury Road",
+    "Summary": "In a post-apocalyptic wasteland, a woman rebels against a tyrannical ruler in search for her homeland with the aid of a group of female prisoners, a psychotic worshiper, and a drifter named Max.",
+    "DurationMinutes": 120,
+    "ReleaseDate": "2015-05-15",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 7 },
+      { "GenreId": 18 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The Scent of Green Papaya",
+    "Summary": "The Scent of Green Papaya tells the story of a young girl, Mùi, who works as a servant for a wealthy family in 1951 Saigon. The film explores Mùi's quiet observations of the world around her and her growing understanding of life's complexities.",
+    "DurationMinutes": 104,
+    "ReleaseDate": "1993-05-28",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 18 },
+      { "GenreId": 21 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "When the Tenth Month Comes",
+    "Summary": "Set during the Vietnam War, When the Tenth Month Comes follows the journey of a young widow, Duyen, who pretends that her husband is still alive to preserve her family's hope. The film depicts the struggles and sacrifices of Vietnamese women during wartime.",
+    "DurationMinutes": 112,
+    "ReleaseDate": "1984-05-25",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 7 },
+      { "GenreId": 21 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Buffalo Boy",
+    "Summary": "Buffalo Boy tells the story of a young boy named Kim growing up in the Mekong Delta during the Vietnam War. Kim's coming-of-age journey is intertwined with the struggles of his family as they depend on water buffaloes for their survival.",
+    "DurationMinutes": 102,
+    "ReleaseDate": "2004-05-12",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 7 },
+      { "GenreId": 21 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The White Silk Dress",
+    "Summary": "The White Silk Dress follows the lives of two sisters, Dan and Nhàn, during the Vietnam War. Through their struggles and sacrifices, the film explores themes of love, loss, and resilience amidst the turmoil of war.",
+    "DurationMinutes": 135,
+    "ReleaseDate": "2006-10-20",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 18 },
+      { "GenreId": 21 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The Floating Lives",
+    "Summary": "Set in 1980s Vietnam, The Floating Lives follows the journey of a poor family as they navigate the challenges of post-war reconstruction. The film explores themes of social change, family dynamics, and the resilience of the human spirit.",
+    "DurationMinutes": 120,
+    "ReleaseDate": "2010-11-05",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 7 },
+      { "GenreId": 21 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "My Neighbor Totoro",
+    "Summary": "Two sisters, Satsuki and Mei, move to the countryside with their father to be closer to their mother, who is recovering from an illness. They discover magical creatures called Totoros who live in the nearby forest.",
+    "DurationMinutes": 86,
+    "ReleaseDate": "1988-04-16",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Spirited Away",
+    "Summary": "A young girl, Chihiro, gets trapped in a mysterious world of spirits while traveling with her parents. To rescue her parents and find her way back home, Chihiro must navigate through a series of surreal and magical challenges.",
+    "DurationMinutes": 125,
+    "ReleaseDate": "2001-07-20",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Princess Mononoke",
+    "Summary": "A young warrior named Ashitaka becomes involved in a struggle between the gods of a forest and the humans who consume its resources. Along the way, he encounters Princess Mononoke, a girl raised by wolves.",
+    "DurationMinutes": 134,
+    "ReleaseDate": "1997-07-12",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 5 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Howl's Moving Castle",
+    "Summary": "Sophie, a young woman, is cursed with old age by a witch and seeks refuge in a moving castle owned by a mysterious wizard named Howl. As she becomes involved in Howl's quest to break his own curse, Sophie discovers her own inner strength.",
+    "DurationMinutes": 119,
+    "ReleaseDate": "2004-11-20",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Kiki's Delivery Service",
+    "Summary": "Kiki, a young witch, moves to a new town with her talking cat, Jiji, to complete her training. She starts a delivery service using her broomstick, but struggles to find her place in the world.",
+    "DurationMinutes": 103,
+    "ReleaseDate": "1989-07-29",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Castle in the Sky",
+    "Summary": "A young boy named Pazu discovers a girl, Sheeta, floating down from the sky wearing a glowing pendant. Together, they embark on a journey to find the legendary floating city of Laputa while being pursued by pirates and government agents.",
+    "DurationMinutes": 124,
+    "ReleaseDate": "1986-08-02",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The Tale of the Princess Kaguya",
+    "Summary": "Based on a Japanese folktale, The Tale of the Princess Kaguya follows the story of a mysterious girl discovered inside a bamboo stalk. As she grows up, Kaguya's extraordinary beauty attracts suitors from far and wide, but her true origins remain a mystery.",
+    "DurationMinutes": 137,
+    "ReleaseDate": "2013-11-23",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Ponyo",
+    "Summary": "A young boy named Sosuke befriends Ponyo, a goldfish princess who dreams of becoming human. When Ponyo's magical powers cause a great imbalance in the world, Sosuke must help her restore the balance and fulfill her dreams.",
+    "DurationMinutes": 101,
+    "ReleaseDate": "2008-07-19",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Whisper of the Heart",
+    "Summary": "Shizuku, a young girl who loves to read, discovers that all the books she borrows from the library have been previously checked out by someone named Seiji. Determined to find Seiji and pursue her own dreams, Shizuku embarks on a journey of self-discovery.",
+    "DurationMinutes": 111,
+    "ReleaseDate": "1995-07-15",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Only Yesterday",
+    "Summary": "Taeko, a 27-year-old office worker, takes a trip to the countryside to escape the hustle and bustle of Tokyo. As she reconnects with her past and childhood memories, Taeko reflects on her life choices and the person she has become.",
+    "DurationMinutes": 118,
+    "ReleaseDate": "1991-07-20",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 16 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Avatar",
+    "Summary": "A paraplegic marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.",
+    "DurationMinutes": 162,
+    "ReleaseDate": "2009-12-18",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 2 },
+      { "GenreId": 8 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The Lion King",
+    "Summary": "Lion cub and future king Simba searches for his identity. His eagerness to please others and penchant for testing his boundaries sometimes gets him into trouble.",
+    "DurationMinutes": 88,
+    "ReleaseDate": "1994-06-24",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 4 },
+      { "GenreId": 8 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Interstellar",
+    "Summary": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+    "DurationMinutes": 169,
+    "ReleaseDate": "2014-11-07",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 8 },
+      { "GenreId": 10 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The Lord of the Rings: The Fellowship of the Ring",
+    "Summary": "A young hobbit, Frodo, inherits a mysterious ring from his uncle Bilbo. As he embarks on a perilous journey to destroy the ring, he is joined by a fellowship of diverse characters who must unite against the dark forces of Sauron.",
+    "DurationMinutes": 178,
+    "ReleaseDate": "2001-12-19",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 1 },
+      { "GenreId": 8 },
+      { "GenreId": 11 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Jurassic Park",
+    "Summary": "During a preview tour, a theme park suffers a major power breakdown that allows its cloned dinosaur exhibits to run amok.",
+    "DurationMinutes": 127,
+    "ReleaseDate": "1993-06-11",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 2 },
+      { "GenreId": 8 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+
+  {
+    "Title": "Spirited Away",
+    "Summary": "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",
+    "DurationMinutes": 125,
+    "ReleaseDate": "2001-07-20",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 10 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Toy Story",
+    "Summary": "A cowboy doll is profoundly threatened and jealous when a new spaceman figure supplants him as top toy in a boy's room.",
+    "DurationMinutes": 81,
+    "ReleaseDate": "1995-11-22",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 10 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Finding Nemo",
+    "Summary": "After his son is captured in the Great Barrier Reef and taken to Sydney, a timid clownfish sets out on a journey to bring him home.",
+    "DurationMinutes": 100,
+    "ReleaseDate": "2003-05-30",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 10 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "My Neighbor Totoro",
+    "Summary": "When two girls move to the country to be near their ailing mother, they have adventures with the wonderous forest spirits who live nearby.",
+    "DurationMinutes": 86,
+    "ReleaseDate": "1988-04-16",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 10 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Inside Out",
+    "Summary": "After young Riley is uprooted from her Midwest life and moved to San Francisco, her emotions - Joy, Fear, Anger, Disgust and Sadness - conflict on how best to navigate a new city, house, and school.",
+    "DurationMinutes": 95,
+    "ReleaseDate": "2015-06-19",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 10 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "The Lion King",
+    "Summary": "Lion prince Simba and his father are targeted by his bitter uncle, who wants to ascend the throne himself.",
+    "DurationMinutes": 88,
+    "ReleaseDate": "1994-06-15",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 10 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Zootopia",
+    "Summary": "In a city of anthropomorphic animals, a rookie bunny cop and a cynical con artist fox must work together to uncover a conspiracy.",
+    "DurationMinutes": 108,
+    "ReleaseDate": "2016-03-04",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 10 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  },
+  {
+    "Title": "Coco",
+    "Summary": "Aspiring musician Miguel, confronted with his family's ancestral ban on music, enters the Land of the Dead to find his great-great-grandfather, a legendary singer.",
+    "DurationMinutes": 105,
+    "ReleaseDate": "2017-11-22",
+    "Status": "Released",
+    "CertificationId": 4,
+    "MovieGenres": [
+      { "GenreId": 5 },
+      { "GenreId": 10 },
+      { "GenreId": 15 }
+    ],
+    "Banner": {
+      "PublicId": "default_banner",
+      "Url": "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
+    }
+  }
+]

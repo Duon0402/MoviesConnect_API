@@ -22,7 +22,13 @@
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "isPrivate",
+        "Type": "System.Boolean",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -79,6 +85,27 @@
   },
   {
     "ContainingType": "API.Controllers.Admins.AdminController",
+    "Method": "DeleteRating",
+    "RelativePath": "api/Admin/DeleteRating",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "movieId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Admins.AdminController",
     "Method": "EditRoles",
     "RelativePath": "api/Admin/edit-roles/{username}",
     "HttpMethod": "POST",
@@ -97,6 +124,37 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Admins.AdminController",
+    "Method": "GetRatingForHandle",
+    "RelativePath": "api/Admin/GetRatingForHandle",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "movieId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "API.DTOs.Movies.Ratings.RatingOutputDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "API.Controllers.Admins.AdminController",
@@ -143,6 +201,32 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "API.Controllers.Admins.AdminController",
+    "Method": "UpdateRatingStatus",
+    "RelativePath": "api/Admin/UpdateRatingStatus",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "movieId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "isViolation",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "API.Controllers.Admins.AdminController",
@@ -466,6 +550,16 @@
         "Name": "movieId",
         "Type": "System.Int32",
         "IsRequired": true
+      },
+      {
+        "Name": "Score",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "RatingViolation",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -565,6 +659,16 @@
         "Name": "movieId",
         "Type": "System.Int32",
         "IsRequired": true
+      },
+      {
+        "Name": "Score",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "RatingViolation",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -604,6 +708,100 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "API.Controllers.ReportController",
+    "Method": "CreateReport",
+    "RelativePath": "api/Report/CreateReport",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "reportCreateDto",
+        "Type": "API.DTOs.Reports.ReportCreateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.ReportController",
+    "Method": "GetListReports",
+    "RelativePath": "api/Report/GetListReports",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Status",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ObjectType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[API.DTOs.Reports.ReportDto, API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "API.Controllers.ReportController",
+    "Method": "GetReport",
+    "RelativePath": "api/Report/GetReport/{reportId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "reportId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "API.DTOs.Reports.ReportDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "API.Controllers.ReportController",
+    "Method": "UpdateStatusReport",
+    "RelativePath": "api/Report/UpdateStatusReport/{reportId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "reportId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "reportUpdateDto",
+        "Type": "API.DTOs.Reports.ReportUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "API.Controllers.Users.UserController",

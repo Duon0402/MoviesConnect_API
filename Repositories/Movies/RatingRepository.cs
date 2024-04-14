@@ -1,6 +1,7 @@
 ﻿using API.Data;
 using API.DTOs.Movies.Ratings;
 using API.Entities.Movies;
+using API.Helpers.Params;
 using API.Interfaces.Movies;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -47,18 +48,32 @@ namespace API.Repositories.Movies
                 .SingleOrDefaultAsync(r => r.MovieId == movieId && r.AppUserId == userId);
         }
 
-        public async Task<IEnumerable<RatingOutputDto>> GetListRatings(int movieId)
+        public async Task<IEnumerable<RatingOutputDto>> GetListRatings(int movieId, RatingParams ratingParams)
         {
-            return await _dataContext.Ratings
+            var query = _dataContext.Ratings
                 .Where(r => r.MovieId == movieId)
-                .Select(r => new RatingOutputDto
-                {
-                    Score = r.Score,
-                    Comment = r.Review,
-                    AppUserId = r.AppUserId,
-                    Username = _dataContext.Users.FirstOrDefault(u => u.Id == r.AppUserId).UserName
-                })
-                .ToListAsync();
+                .Where(r => r.IsDeleted == false)
+                .AsQueryable();
+
+            if (ratingParams.Score.HasValue)
+            {
+                query = query.Where(r => r.Score == ratingParams.Score);
+            }
+
+            if (ratingParams.RatingViolation.HasValue && ratingParams.RatingViolation == true)
+            {
+                query = query.Where(r => !r.RatingViolation);
+            }
+
+            var result = await query.Select(r => new RatingOutputDto
+            {
+                Score = r.Score,
+                Review = r.Review,
+                AppUserId = r.AppUserId,
+                Username = _dataContext.Users.FirstOrDefault(u => u.Id == r.AppUserId).UserName
+            }).ToListAsync();
+
+            return result;
         }
 
         public async Task<bool> RatingExits(int movieId, int userId)
@@ -82,7 +97,7 @@ namespace API.Repositories.Movies
             var ratingOutputDto = new RatingOutputDto
             {
                 Score = ratingDto.Score,
-                Comment = ratingDto.Review,
+                Review = ratingDto.Review,
                 AppUserId = userId,
                 Username = ratingDto.AppUser.UserName
             };

@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Admin;
+using API.DTOs.Movies.Ratings;
 using API.DTOs.Reports;
 using API.Entities;
 using API.Entities.Movies;
@@ -20,13 +21,15 @@ namespace API.Controllers.Admins
         private readonly UserManager<AppUser> _userManager;
         private readonly IMovieRepository _movieRepository;
         private readonly IReportRepository _reportRepository;
+        private readonly IRatingRepository _ratingRepository;
 
-        public AdminController(UserManager<AppUser> userManager, IMovieRepository movieRepository, 
-            IReportRepository reportRepository)
+        public AdminController(UserManager<AppUser> userManager, IMovieRepository movieRepository,
+            IReportRepository reportRepository, IRatingRepository ratingRepository)
         {
             _userManager = userManager;
             _movieRepository = movieRepository;
             _reportRepository = reportRepository;
+            _ratingRepository = ratingRepository;
         }
 
         // Users
@@ -96,43 +99,40 @@ namespace API.Controllers.Admins
             return Ok(await _movieRepository.GetMovieByIdForEdit(movieId));
         }
         #endregion
-
-        // Report
-        #region CreateReport
-        [HttpPost("report")]
-        public async Task<ActionResult> CreateReport(ReportCreateDto reportCreateDto)
+        [Authorize(Policy = "RequireModeratorRole")]
+        [HttpDelete("DeleteRating")]
+        public async Task<ActionResult> DeleteRating(int userId, int movieId)
         {
-            var newReport = new Report()
-            {
-                Content = reportCreateDto.Content,
-                ObjectId = reportCreateDto.ObjectId,
-                ObjectType = reportCreateDto.ObjectType,
-                ReporterId = User.GetUserId(),
-                Status = "Pending", // Trạng thái chưa xử lý, đã xử lý là Processed
-            };
-            _reportRepository.CreateReport(newReport);
-            return Ok();
+            var rating = await _ratingRepository.GetRatingForEdit(movieId, userId);
+            rating.IsDeleted = true;
+            rating.DeletedAt = DateTime.Now;
+            rating.DeletedId = User.GetUserId();
+
+            _ratingRepository.RemoveRating(rating);
+            if (await _ratingRepository.Save()) return Ok();
+
+            return BadRequest("Failed to delete rating");
         }
-        #endregion
 
-        #region GetReports
-        [HttpGet("reports")]
-        public async Task<ActionResult<IEnumerable<Report>>> GetReports([FromQuery] ReportParams reportParams)
+        [Authorize(Policy = "RequireModeratorRole")]
+        [HttpPut("UpdateRatingStatus")]
+        public async Task<ActionResult> UpdateRatingStatus(int userId, int movieId, bool isViolation)
         {
-            var reports = await _reportRepository.GetListReports(reportParams);
-            return Ok(reports);
+            var rating = await _ratingRepository.GetRatingForEdit(movieId, userId);
+            rating.RatingViolation = isViolation;
+
+            _ratingRepository.EditRating(rating);
+            if (await _ratingRepository.Save()) return Ok();
+
+            return BadRequest("Failed to update status rating");
         }
-        #endregion
 
-        #region UpdateStatusReport
-        [HttpPut("update-status-report/{reportId}")]
-        public async Task<ActionResult> UpdateStatusReport(int reportId,[FromBody] ReportUpdateDto reportUpdateDto)
+        [Authorize(Policy = "RequireModeratorRole")]
+        [HttpGet("GetRatingForHandle")]
+        public async Task<ActionResult<RatingOutputDto>> GetRatingForHandle(int userId, int movieId)
         {
-            var report = await _reportRepository.GetReport(reportId);
-            report.Status = reportUpdateDto.Status;
-            if (await _reportRepository.Save()) return Ok();
-            return BadRequest("Failed to update status report");
-        } 
-        #endregion
+            var rating = await _ratingRepository.GetRating(movieId, userId);
+            return Ok(rating);
+        }
     }
 }

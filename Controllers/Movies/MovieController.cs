@@ -4,6 +4,7 @@ using API.DTOs.Photos;
 using API.Entities.Movies;
 using API.Entities.Users;
 using API.Extentions;
+using API.Helpers.Params;
 using API.Helpers.Params.Movies;
 using API.Interfaces;
 using API.Interfaces.Movies;
@@ -49,7 +50,7 @@ namespace API.Controllers.Movies
                 Url = "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
             };
             
-            var newMovie = new Movie()
+            var newMovie = new Movie()  
             {
                 CreatedId = User.GetUserId(),
                 CreatedAt = DateTime.Now,
@@ -114,11 +115,11 @@ namespace API.Controllers.Movies
 
         #region GetMovieById
         [HttpGet("GetMovieById/{movieId}")]
-        public async Task<ActionResult<MovieOutputDto>> GetMovieById(int movieId)
+        public async Task<ActionResult<MovieOutputDto>> GetMovieById(int movieId, [FromQuery] RatingParams ratingParams)
         {
             var movie = await _movieRepository.GetMovieById(movieId);
             if (movie == null) return NotFound();
-            var rating = await _ratingRepository.GetListRatings(movieId);
+            var rating = await _ratingRepository.GetListRatings(movieId, ratingParams);
             movie.Genres = await _movieRepository.GetListGenresByMovieId(movieId);
             movie.TotalRatings = rating.Count();
             movie.AverageRating = rating.CalculateRatingScore();

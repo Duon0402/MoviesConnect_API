@@ -7,7 +7,7 @@ namespace API.Entities.Users
     {
         public string FullName { get; set; }
         public string Gender { get; set; }
-        public bool IsPublic { get; set; } = true;
+        public bool IsPrivate { get; set; } = false;
         public DateTime DateOfBirth { get; set; }
         public DateTime CreateAt { get; set; } = DateTime.Now;
         public ICollection<AppUserRole> UserRoles { get; set; }

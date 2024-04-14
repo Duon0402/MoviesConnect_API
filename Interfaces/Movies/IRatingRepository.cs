@@ -1,5 +1,6 @@
 ﻿using API.DTOs.Movies.Ratings;
 using API.Entities.Movies;
+using API.Helpers.Params;
 
 namespace API.Interfaces.Movies
 {
@@ -12,6 +13,6 @@ namespace API.Interfaces.Movies
         Task<bool> RatingExits(int movieId, int userId);
         Task<Rating> GetRatingForEdit(int movieId, int userId);
         Task<RatingOutputDto> GetRating(int movieId, int userId);
-        Task<IEnumerable<RatingOutputDto>> GetListRatings(int movieId);
+        Task<IEnumerable<RatingOutputDto>> GetListRatings(int movieId, RatingParams ratingParams);
     }
 }

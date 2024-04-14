@@ -15,6 +15,7 @@ namespace API.Entities
         public string Status { get; set; }
         public string ObjectType { get; set; } // Loại đối tượng (rating, movie, hoặc một loại khác)
         public int ObjectId { get; set; }
+        public int? ObjectId2 { get; set; }
         public int ReporterId { get; set; }
         public DateTime ReportTime { get; set; } // Thời gian báo cáo
         public int HandlerId { get; set; } // ID của người xử lý

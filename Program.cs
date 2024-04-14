@@ -31,6 +31,9 @@ try
     await context.Database.MigrateAsync();
     await Seed.SeedUsers(userManager, roleManager);
     await Seed.SeedCertifications(context);
+    await Seed.SeedGenres(context);
+    await Seed.SeedMovies(context);
+    await Seed.SeedAdmin(userManager);
 }
 catch (Exception ex)
 {

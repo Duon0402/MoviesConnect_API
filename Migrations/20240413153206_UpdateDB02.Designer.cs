@@ -4,6 +4,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240413153206_UpdateDB02")]
+    partial class UpdateDB02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,15 +214,6 @@ namespace API.Migrations
                     b.Property<int>("AppUserId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("RatingViolation")
                         .HasColumnType("bit");
 
@@ -271,9 +264,6 @@ namespace API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ObjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ObjectId2")
                         .HasColumnType("int");
 
                     b.Property<string>("ObjectType")
@@ -361,7 +351,7 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsPrivate")
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")

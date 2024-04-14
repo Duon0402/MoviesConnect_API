@@ -112,15 +112,15 @@ namespace API.Controllers.Users
 
         [Authorize]
         [HttpPut("ChangeSettingAccount")]
-        public async Task<ActionResult> ChangeSettingAccount()
+        public async Task<ActionResult> ChangeSettingAccount([FromBody] Boolean isPrivate)
         {
             var user = await _userRepository.GetUserById(User.GetUserId());
 
-            user.IsPublic = !user.IsPublic;
+            user.IsPrivate = isPrivate;
 
             _userRepository.UpdateUser(user);
 
-            if (await _userRepository.Save()) return Ok(user.IsPublic);
+            if (await _userRepository.Save()) return Ok(user.IsPrivate);
 
             return BadRequest("Failed to change setting account");
         }

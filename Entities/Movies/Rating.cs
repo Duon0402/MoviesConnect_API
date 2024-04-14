@@ -8,7 +8,10 @@ namespace API.Entities.Movies
     {
         public int Score { get; set; }
         public string? Review { get; set; }
-        public bool IsSpoil { get; set; } = false;
+        public bool RatingViolation { get; set; } = false;
+        public int? DeletedId { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public bool IsDeleted { get; set; } = false;
         public int AppUserId { get; set; }
         public AppUser AppUser { get; set; }
         public int MovieId { get; set; }

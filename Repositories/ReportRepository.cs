@@ -1,8 +1,11 @@
 ﻿using API.Data;
+using API.DTOs.Reports;
 using API.Entities;
 using API.Entities.Users;
 using API.Helpers.Params;
 using API.Interfaces;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
@@ -10,10 +13,12 @@ namespace API.Repositories
     public class ReportRepository : IReportRepository
     {
         private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
 
-        public ReportRepository(DataContext dataContext)
+        public ReportRepository(DataContext dataContext, IMapper mapper)
         {
             _dataContext = dataContext;
+            _mapper = mapper;
         }
         public void CreateReport(Report report)
         {
@@ -30,11 +35,12 @@ namespace API.Repositories
             return await _dataContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<Report>> GetListReports(ReportParams reportParams)
+        public async Task<IEnumerable<ReportDto>> GetListReports(ReportParams reportParams)
         {
             var query = _dataContext.Reports
                 .OrderByDescending(r => r.Id)
                 .ThenByDescending(r => r.ReportTime)
+                .ProjectTo<ReportDto>(_mapper.ConfigurationProvider)
                 .AsQueryable();
 
             if(!string.IsNullOrWhiteSpace(reportParams.ObjectType))
