@@ -36,9 +36,9 @@ namespace API.Controllers.Users
         {
             return await _userRepository.GetMemberById(userId);
         }
-
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpGet("GetListUsers")]
-        public async Task<ActionResult<MemberDto>> GetListUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetListUsers()
         {
             var users = await _userRepository.GetListMembers();
             return Ok(users);

@@ -50,7 +50,7 @@ namespace API.Controllers.Movies
                 Url = "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
             };
             
-            var newMovie = new Movie()  
+            var newMovie = new Movie()
             {
                 CreatedId = User.GetUserId(),
                 CreatedAt = DateTime.Now,

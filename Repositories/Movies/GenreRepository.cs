@@ -79,7 +79,5 @@ namespace API.Repositories.Movies
         {
             _dataContext.Entry(genre).State = EntityState.Modified;
         }
-
-
     }
 }

@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
     public class RatingController : BaseApiController
     {
         private readonly IRatingRepository _ratingRepository;
@@ -26,7 +25,7 @@ namespace API.Controllers
             _movieRepository = movieRepository;
             _userRepository = userRepository;
         }
-
+        [Authorize]
         [HttpPost("AddOrEditRating/{movieId}")]
         public async Task<ActionResult> AddOrEditRating(int movieId, [FromBody] RatingAddOrEditDto ratingAddOrEdit)
         {

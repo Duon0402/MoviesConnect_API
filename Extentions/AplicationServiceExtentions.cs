@@ -14,6 +14,7 @@ namespace API.Extentions
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration config)
         {
             #region AddScoped<>
+            services.AddScoped<IStatisticsRepository, StatisticsRepository>();
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IRecommendMovieService, RecommendMovieService>();
             services.AddScoped<IRatingRepository, RatingRepository>();

@@ -22,14 +22,17 @@ namespace API.Controllers.Admins
         private readonly IMovieRepository _movieRepository;
         private readonly IReportRepository _reportRepository;
         private readonly IRatingRepository _ratingRepository;
+        private readonly IStatisticsRepository _statisticsRepository;
 
         public AdminController(UserManager<AppUser> userManager, IMovieRepository movieRepository,
-            IReportRepository reportRepository, IRatingRepository ratingRepository)
+            IReportRepository reportRepository, IRatingRepository ratingRepository, 
+            IStatisticsRepository statisticsRepository)
         {
             _userManager = userManager;
             _movieRepository = movieRepository;
             _reportRepository = reportRepository;
             _ratingRepository = ratingRepository;
+            _statisticsRepository = statisticsRepository;
         }
 
         // Users
@@ -104,6 +107,8 @@ namespace API.Controllers.Admins
         public async Task<ActionResult> DeleteRating(int userId, int movieId)
         {
             var rating = await _ratingRepository.GetRatingForEdit(movieId, userId);
+            if (rating == null) return BadRequest("Rating is deleted before");
+            if (rating.IsDeleted == true) return BadRequest("Rating is deleted before");
             rating.IsDeleted = true;
             rating.DeletedAt = DateTime.Now;
             rating.DeletedId = User.GetUserId();
@@ -116,10 +121,12 @@ namespace API.Controllers.Admins
 
         [Authorize(Policy = "RequireModeratorRole")]
         [HttpPut("UpdateRatingStatus")]
-        public async Task<ActionResult> UpdateRatingStatus(int userId, int movieId, bool isViolation)
+        public async Task<ActionResult> UpdateRatingStatus([FromQuery] int userId, int movieId)
         {
             var rating = await _ratingRepository.GetRatingForEdit(movieId, userId);
-            rating.RatingViolation = isViolation;
+            if (rating == null) return BadRequest();
+            if (rating.RatingViolation == true) return Ok();
+            else rating.RatingViolation = true;
 
             _ratingRepository.EditRating(rating);
             if (await _ratingRepository.Save()) return Ok();
@@ -129,10 +136,18 @@ namespace API.Controllers.Admins
 
         [Authorize(Policy = "RequireModeratorRole")]
         [HttpGet("GetRatingForHandle")]
-        public async Task<ActionResult<RatingOutputDto>> GetRatingForHandle(int userId, int movieId)
+        public async Task<ActionResult<RatingOutputDto>> GetRatingForHandle([FromQuery] int movieId, int userId)
         {
             var rating = await _ratingRepository.GetRating(movieId, userId);
+            if (rating == null) return BadRequest("Rating is deleted");
             return Ok(rating);
+        }
+
+        [Authorize(Policy = "RequireModeratorRole")]
+        [HttpGet("GetStatistics")]
+        public async Task<ActionResult<StatisticsDto>> GetStatistics()
+        {
+            return await _statisticsRepository.GetStatistics();
         }
     }
 }

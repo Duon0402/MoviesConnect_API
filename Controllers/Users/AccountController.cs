@@ -77,12 +77,12 @@ namespace API.Controllers.Users
                 .Include(a => a.Avatar)
                 .SingleOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
 
-            if (user == null) return Unauthorized("Invalid username");
+            if (user == null) return BadRequest("Invalid username");
 
             var result = await _signInManager
                 .CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-            if (!result.Succeeded) return Unauthorized("Invalid password");
+            if (!result.Succeeded) return BadRequest("Invalid password");
             var roles = await _userManager.GetRolesAsync(user);
             return new AccountOutputDto
             {

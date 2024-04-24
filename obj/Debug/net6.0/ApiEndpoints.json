@@ -134,12 +134,12 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
+        "Name": "movieId",
         "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "movieId",
+        "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": false
       }
@@ -147,6 +147,26 @@
     "ReturnTypes": [
       {
         "Type": "API.DTOs.Movies.Ratings.RatingOutputDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "API.Controllers.Admins.AdminController",
+    "Method": "GetStatistics",
+    "RelativePath": "api/Admin/GetStatistics",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "API.DTOs.Admin.StatisticsDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -219,11 +239,6 @@
         "Name": "movieId",
         "Type": "System.Int32",
         "IsRequired": false
-      },
-      {
-        "Name": "isViolation",
-        "Type": "System.Boolean",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -250,6 +265,43 @@
   },
   {
     "ContainingType": "API.Controllers.Movies.CertificationController",
+    "Method": "CreateCertifi",
+    "RelativePath": "api/Certification/CreateOrEditCertifi/{certiId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "certiId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "certificationCreateOrEdit",
+        "Type": "API.DTOs.Movies.Certifications.CertificationCreateOrEditDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Movies.CertificationController",
+    "Method": "DeleteCertification",
+    "RelativePath": "api/Certification/DeleteCertification/{certiId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "certiId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Movies.CertificationController",
     "Method": "GetCertificationById",
     "RelativePath": "api/Certification/GetCertificationById/{certiId}",
     "HttpMethod": "GET",
@@ -262,7 +314,17 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "API.DTOs.Movies.Certifications.CertificationOutputDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "API.Controllers.Movies.CertificationController",
@@ -318,6 +380,32 @@
   },
   {
     "ContainingType": "API.Controllers.Movies.GenreController",
+    "Method": "GetGenre",
+    "RelativePath": "api/Genre/GetGenre/{genreId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "genreId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "API.DTOs.Movies.Genres.GenreOutputDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "API.Controllers.Movies.GenreController",
     "Method": "GetGenreById",
     "RelativePath": "api/Genre/GetGenreById/{genreId}",
     "HttpMethod": "GET",
@@ -366,7 +454,17 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[API.DTOs.Movies.Movie.MovieOutputDto, API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "API.Controllers.Movies.GenreController",
@@ -813,7 +911,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "API.DTOs.Users.MemberDto",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[API.DTOs.Users.MemberDto, API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

@@ -48,6 +48,7 @@ namespace API.Helpers
 
             // certifications
             CreateMap<CertificationOutputDto, Certification>().ReverseMap();
+            CreateMap<CertificationCreateOrEditDto, Certification>().ReverseMap();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Movies.Genres;
+using API.DTOs.Movies.Movie;
 using API.Entities.Movies;
 using API.Extentions;
 using API.Interfaces.Movies;
@@ -19,7 +20,7 @@ namespace API.Controllers.Movies
             _genreRepository = genreRepository;
             _mapper = mapper;
         }
-        [Authorize]
+        [Authorize(Policy = "RequireModeratorRole")]
         [HttpPost("CreateGenre")]
         public async Task<ActionResult> CreateGenre([FromBody] GenreCreateDto genreCreate)
         {
@@ -38,7 +39,8 @@ namespace API.Controllers.Movies
 
             return NoContent();
         }
-        [Authorize]
+        
+        [Authorize(Policy = "RequireModeratorRole")]
         [HttpPut("UpdateGenre/{genreId}")]
         public async Task<ActionResult> UpdateGenre(int genreId, [FromBody] GenreUpdateDto updateDto)
         {
@@ -54,7 +56,8 @@ namespace API.Controllers.Movies
 
             return BadRequest("Failed to update genre");
         }
-        [Authorize]
+        
+        [Authorize(Policy = "RequireModeratorRole")]
         [HttpDelete("DeleteGenre/{genreId}")]
         public async Task<ActionResult> DeleteGenre(int genreId)
         {
@@ -70,6 +73,7 @@ namespace API.Controllers.Movies
 
             return BadRequest("Failed to delete genre");
         }
+
 
         [HttpGet("GetGenreById/{genreId}")]
         public async Task<ActionResult> GetGenreById(int genreId)
@@ -89,10 +93,18 @@ namespace API.Controllers.Movies
         }
 
         [HttpGet("GetListMoviesByGenreId/{genreId}")]
-        public async Task<ActionResult> GetListMoviesByGenreId(int genreId)
+        public async Task<ActionResult<IEnumerable<MovieOutputDto>>> GetListMoviesByGenreId(int genreId)
         {
-            var genres = await _genreRepository.GetListMoviesByGenreId(genreId);
-            return Ok(genres);
+            var movies = await _genreRepository.GetListMoviesByGenreId(genreId);
+            return Ok(movies);
+        }
+
+        [Authorize(Policy = "RequireModeratorRole")]
+        [HttpGet("GetGenre/{genreId}")]
+        public async Task<ActionResult<GenreOutputDto>> GetGenre(int genreId)
+        {
+            var genre = await _genreRepository.GetGenreById(genreId);
+            return Ok(genre);
         }
     }
 }
