@@ -37,7 +37,7 @@ namespace API.Controllers.Movies
         #region CreateMovie
         [Authorize]
         [HttpPost("CreateMovie")]
-        public async Task<ActionResult> CreateMovie([FromBody] MovieCreateDto movieCreate)
+        public async Task<ActionResult<int>> CreateMovie([FromBody] MovieCreateDto movieCreate)
         {
             var userRoles = User.GetRoles();
 
@@ -49,7 +49,7 @@ namespace API.Controllers.Movies
                 PublicId = "default_banner",
                 Url = "https://res.cloudinary.com/dspm3zys2/image/upload/v1707741602/moviebanner_djgd3a.jpg"
             };
-            
+
             var newMovie = new Movie()
             {
                 CreatedId = User.GetUserId(),
@@ -64,14 +64,16 @@ namespace API.Controllers.Movies
 
             _mapper.Map(movieCreate, newMovie);
             _movieRepository.CreateMovie(newMovie);
-            return NoContent();
+
+            await _movieRepository.Save();
+            return Ok(newMovie.Id);
         }
         #endregion
 
         #region UpdateMovie
         [Authorize]
         [HttpPut("UpdateMovie/{movieId}")]
-        public async Task<ActionResult> UpdateMovie(int movieId,[FromBody]MovieUpdateDto movieUpdate)
+        public async Task<ActionResult<int>> UpdateMovie(int movieId,[FromBody]MovieUpdateDto movieUpdate)
         {
             var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
             if(movie == null || movie.IsDeleted == true) return NotFound();
@@ -88,7 +90,7 @@ namespace API.Controllers.Movies
 
             _mapper.Map(movieUpdate, movie);
             _movieRepository.UpdateMovie(movie);
-            if (await _movieRepository.Save()) return NoContent();
+            if (await _movieRepository.Save()) return Ok(movie.Id);
 
             return BadRequest("Failed to update movie");
         }
@@ -165,8 +167,9 @@ namespace API.Controllers.Movies
         [HttpPost("SetBanner/{movieId}")]
         public async Task<ActionResult<AvatarDto>> SetBanner(int movieId, IFormFile file)
         {
+            if (file == null) return BadRequest("File image invalid");
             var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
-
+            if (movie == null) return NotFound();
             if (movie.Banner.PublicId != null || movie.Banner.PublicId != "default_banner")
             {
                 await _photoService.DeletePhoto(movie.Banner.PublicId);

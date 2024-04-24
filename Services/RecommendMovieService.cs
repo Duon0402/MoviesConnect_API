@@ -39,6 +39,16 @@ namespace API.Services
                 .OrderByDescending(m => m.Ratings.Count)
                 .ThenByDescending(m => m.Ratings.Average(r => r.Score))
                 .ThenByDescending(m => m.ReleaseDate)
+                .AsQueryable();
+
+            if (userWatchedMovieIds.Any())
+                query = query.Where(m => !userWatchedMovieIds.Contains(m.Id));
+
+            if (userRatedMovieIds.Any())
+                query = query.Where(m => !userRatedMovieIds.Contains(m.Id));
+
+            var recommendedMovies = await query
+                .Take(12)
                 .Select(m => new ListMoviesOutputDto
                 {
                     Id = m.Id,
@@ -51,22 +61,15 @@ namespace API.Services
                     },
                     IsInWatchList = userWatchedMovieIds.Contains(m.Id),
                     TotalRatings = m.Ratings.Count
-                })
-                .AsQueryable();
+                }).ToListAsync();
 
-            if (userWatchedMovieIds.Any())
-                query = query.Where(m => !userWatchedMovieIds.Contains(m.Id));
-
-            if (userRatedMovieIds.Any())
-                query = query.Where(m => !userRatedMovieIds.Contains(m.Id));
-
-            var recommendedMovies = await query.Take(12).ToListAsync();
             return recommendedMovies;
         }
 
         private async Task<List<int>> GetUserRatedMovieIds(int userId)
         {
             return await _dataContext.Ratings
+                .AsNoTracking()
                 .Where(r => r.AppUserId == userId)
                 .Select(r => r.MovieId)
                 .ToListAsync();
@@ -75,6 +78,7 @@ namespace API.Services
         private async Task<List<int>> GetUserWatchedMovieIds(int userId)
         {
             return await _dataContext.Watchlists
+                .AsNoTracking()
                 .Where(w => w.AppUserId == userId)
                 .Select(w => w.MovieId)
                 .ToListAsync();
