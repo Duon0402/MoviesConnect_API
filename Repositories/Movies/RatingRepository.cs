@@ -51,8 +51,7 @@ namespace API.Repositories.Movies
         public async Task<IEnumerable<RatingOutputDto>> GetListRatings(int movieId, RatingParams ratingParams)
         {
             var query = _dataContext.Ratings
-                .Where(r => r.MovieId == movieId)
-                .Where(r => r.IsDeleted == false)
+                .Where(r => r.MovieId == movieId && !r.IsDeleted)
                 .AsQueryable();
 
             if (ratingParams.Score.HasValue)
@@ -60,9 +59,12 @@ namespace API.Repositories.Movies
                 query = query.Where(r => r.Score == ratingParams.Score);
             }
 
-            if (ratingParams.RatingViolation.HasValue && ratingParams.RatingViolation == true)
+            if (ratingParams.RatingViolation.HasValue)
             {
-                query = query.Where(r => !r.RatingViolation);
+                if (ratingParams.RatingViolation.Value == false)
+                {
+                    query = query.Where(r => r.RatingViolation == false);
+                }
             }
 
             var result = await query.Select(r => new RatingOutputDto

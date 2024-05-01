@@ -15,5 +15,9 @@ namespace API.Entities.Users
         public ICollection<Rating> Ratings { get; set; }
         public ICollection<Watchlist> Watchlists { get; set; }
 
+        // Điểm đóng góp
+        public int ContributionPoints { get; set; }
+        public ICollection<PointTransaction> PointTransactions { get; set; }
+        public ICollection<Voucher> Vouchers { get; set; }
     }
 }

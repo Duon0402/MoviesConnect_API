@@ -1,5 +1,6 @@
 ﻿using API.Entities;
 using API.Entities.Movies;
+using API.Entities.Movies.Persons;
 using API.Entities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -17,11 +18,18 @@ namespace API.Data
         }
 
         #region DbSet<>
+        public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<Actor> Actors { get; set; }
+        public DbSet<MovieActor> MovieActors { get; set; }
+        public DbSet<Director> Directors { get; set; }
+        public DbSet<PointTransaction> PointTransaction { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Watchlist> Watchlists { get; set; }
         public DbSet<Avatar> Avatars { get; set; }
         public DbSet<Banner> Banners { get; set; }
+        public DbSet<DirectorImage> DirectorImages { get; set; }
+        public DbSet<ActorImage> ActorImages { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Genre> Genres { get; set; } // the loai
         public DbSet<MovieGenre> MovieGenres { get; set; }
@@ -72,6 +80,17 @@ namespace API.Data
                 .HasForeignKey<Banner>(m => m.MovieId)
                 .IsRequired();
 
+            modelBuilder.Entity<ActorImage>()
+                .HasOne(m => m.Actor)
+                .WithOne(b => b.ActorImage)
+                .HasForeignKey<ActorImage>(a => a.ActorId)
+                .IsRequired();
+
+            modelBuilder.Entity<DirectorImage>()
+                .HasOne(m => m.Director)
+                .WithOne(b => b.DirectorImage)
+                .HasForeignKey<DirectorImage>(d => d.DirectorId)
+                .IsRequired();
             #endregion
 
             #region Movies
@@ -92,7 +111,29 @@ namespace API.Data
                 .HasOne(m => m.Certification)
                 .WithMany(c => c.Movies)
                 .HasForeignKey(m => m.CertificationId);
+            #endregion
 
+            #region Movies - Persons
+            modelBuilder.Entity<Movie>()
+                .HasOne(m => m.Director)
+                .WithMany(d => d.Movies)
+                .HasForeignKey(m => m.DirectorId)
+                .IsRequired();
+
+            modelBuilder.Entity<MovieActor>()
+                .HasKey(ma => new { ma.MovieId, ma.ActorId });
+
+            modelBuilder.Entity<MovieActor>()
+                .HasOne(ma => ma.Movie)
+                .WithMany(m => m.MovieActors)
+                .HasForeignKey(ma => ma.MovieId)
+                .IsRequired();
+
+            modelBuilder.Entity<MovieActor>()
+                .HasOne(ma => ma.Actor)
+                .WithMany(a => a.MovieActors)
+                .HasForeignKey(ma => ma.ActorId)
+                .IsRequired();
             #endregion
 
             #region Users
@@ -102,10 +143,24 @@ namespace API.Data
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
 
+            modelBuilder.Entity<AppUser>()
+                .HasMany (up => up.PointTransactions)
+                .WithOne (u => u.User)
+                .HasForeignKey(up => up.UserId)
+                .IsRequired();
+
             modelBuilder.Entity<AppRole>()
                 .HasMany(ur => ur.UserRoles)
                 .WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+            #endregion
+
+            #region Voucher
+            modelBuilder.Entity<Voucher>()
+                .HasOne(v => v.User)
+                .WithMany(u => u.Vouchers)
+                .HasForeignKey(v => v.UserId)
                 .IsRequired();
             #endregion
         }

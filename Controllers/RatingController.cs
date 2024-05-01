@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Movies.Ratings;
+using API.DTOs.Points;
 using API.Entities.Movies;
 using API.Extentions;
 using API.Helpers.Params;
@@ -45,6 +46,22 @@ namespace API.Controllers
                     Movie = movie,
                     AppUser = user
                 };
+
+                string movieTitle = movie.Title;
+
+                // Xác định số điểm cần cộng dựa trên việc có viết review hay không
+                int pointsChange = (string.IsNullOrWhiteSpace(ratingAddOrEdit.Review)) ? 10 : 20;
+
+                var pointsTran = new PointTransactionInputDto
+                {
+                    UserId = user.Id,
+                    PointsChange = pointsChange,
+                    Description = (string.IsNullOrWhiteSpace(ratingAddOrEdit.Review))
+                        ? $"Rating movie: \"{movieTitle}\""
+                        : $"Rating and write review for movie: \"{movieTitle}\""
+                };
+                await _userRepository.UpdateContributionPoints(pointsTran);
+                
 
                 _mapper.Map(ratingAddOrEdit, newRating);
                 _ratingRepository.AddRating(newRating);

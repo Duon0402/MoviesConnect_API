@@ -1,13 +1,10 @@
 ﻿using API.Data;
 using API.DTOs.Movies.Movie;
 using API.DTOs.Photos;
-using API.Entities.Movies;
 using API.Extentions;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace API.Services
 {
@@ -15,11 +12,13 @@ namespace API.Services
     {
         private readonly DataContext _dataContext;
         private readonly IUserRepository _userRepository;
+        private readonly IMemoryCache _cache;
 
-        public RecommendMovieService(DataContext dataContext, IUserRepository userRepository)
+        public RecommendMovieService(DataContext dataContext, IUserRepository userRepository, IMemoryCache cache)
         {
             _dataContext = dataContext;
             _userRepository = userRepository;
+            _cache = cache;
         }
 
         public async Task<IEnumerable<ListMoviesOutputDto>> GetListRecommendMovies(int userId)
@@ -27,6 +26,20 @@ namespace API.Services
             if (userId == 0 || userId == null)
                 return null;
 
+            var cacheKey = $"RecommendedMovies_{userId}";
+            if (_cache.TryGetValue(cacheKey, out IEnumerable<ListMoviesOutputDto> recommendedMovies))
+            {
+                return recommendedMovies;
+            }
+
+            recommendedMovies = await CalculateRecommendedMovies(userId);
+            _cache.Set(cacheKey, recommendedMovies, TimeSpan.FromMinutes(5));
+
+            return recommendedMovies;
+        }
+
+        private async Task<IEnumerable<ListMoviesOutputDto>> CalculateRecommendedMovies(int userId)
+        {
             var user = await _userRepository.GetMemberById(userId);
             var userAge = user.DateOfBirth.CalculateAge();
 
@@ -35,11 +48,18 @@ namespace API.Services
 
             var query = _dataContext.Movies
                 .AsNoTracking()
-                .Where(m => !m.IsDeleted && m.Certification.MinimumAge <= userAge)
+                .Where(m => !m.IsDeleted && m.Certification.MinimumAge <= userAge && m.Status == "Released")
                 .OrderByDescending(m => m.Ratings.Count)
                 .ThenByDescending(m => m.Ratings.Average(r => r.Score))
                 .ThenByDescending(m => m.ReleaseDate)
-                .AsQueryable();
+                .Select(m => new
+                {
+                    m.Id,
+                    m.Title,
+                    m.Ratings,
+                    m.ReleaseDate,
+                    m.Banner,
+                });
 
             if (userWatchedMovieIds.Any())
                 query = query.Where(m => !userWatchedMovieIds.Contains(m.Id));
@@ -54,7 +74,7 @@ namespace API.Services
                     Id = m.Id,
                     Title = m.Title,
                     AverageRating = m.Ratings.Any() ? m.Ratings.Average(r => r.Score) : 0,
-                    BannerOutput = new BannerDto
+                    Banner = new BannerDto
                     {
                         Id = m.Banner.Id,
                         Url = m.Banner.Url

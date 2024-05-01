@@ -13,5 +13,6 @@ namespace API.DTOs.Users
         public DateTime DateOfBirth { get; set; }
         public bool IsPrivate { get; set; }
         public AvatarDto Avatar { get; set; }
+        public int ContributionPoints { get; set; }
     }
 }

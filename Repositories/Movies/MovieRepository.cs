@@ -62,6 +62,9 @@ namespace API.Repositories.Movies
                 .Include(r => r.Ratings)
                 .Include(mg => mg.MovieGenres)
                     .ThenInclude(g => g.Genre)
+                .Include(mc => mc.MovieActors)
+                    .ThenInclude(a => a.Actor)
+                .Include(d => d.Director)
                 .SingleOrDefaultAsync(m => m.Id == movieId);
         }
 
@@ -103,6 +106,18 @@ namespace API.Repositories.Movies
             if (movieParams.GenreId != null && movieParams.GenreId.Any())
             {
                 query = query.Where(m => m.MovieGenres.Any(g => movieParams.GenreId.Contains(g.GenreId)));
+            }
+
+            // Filter by actors
+            if (movieParams.ActorId != null && movieParams.ActorId.Any())
+            {
+                query = query.Where(m => m.MovieActors.Any(g => movieParams.ActorId.Contains(g.ActorId)));
+            }
+
+            // Filter by directors
+            if (movieParams.DirectorId != null && movieParams.DirectorId.Any())
+            {
+                query = query.Where(m => movieParams.DirectorId.Contains(m.DirectorId));
             }
 
             // Filter by status
@@ -147,7 +162,7 @@ namespace API.Repositories.Movies
                 TotalRatings = _dataContext.Ratings.Count(r => r.MovieId == m.Id),
                 IsInWatchList = userId != -1 ? _dataContext.Watchlists
                     .Any(w => w.MovieId == m.Id && w.AppUserId == userId) : false,
-                BannerOutput = _mapper.Map<BannerDto>(m.Banner),
+                Banner = _mapper.Map<BannerDto>(m.Banner),
             });
 
             query2 = movieParams.OrderBy switch

@@ -1,4 +1,6 @@
-﻿using API.DTOs.Movies.Certifications;
+﻿using API.DTOs.Movies.Actor;
+using API.DTOs.Movies.Certifications;
+using API.DTOs.Movies.Directors;
 using API.DTOs.Movies.Genres;
 using API.DTOs.Photos;
 using API.Entities.Movies;
@@ -19,5 +21,7 @@ namespace API.DTOs.Movies.Movie
         public BannerDto Banner { get; set; }
         public IEnumerable<GenreOutputDto> Genres { get; set; }
         public CertificationOutputDto Certification { get; set; }
+        public DirectorOutputDto Director { get; set; }
+        public IEnumerable<ActorOutputDto> Actors { get; set; }
     }
 }

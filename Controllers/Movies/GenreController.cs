@@ -99,7 +99,6 @@ namespace API.Controllers.Movies
             return Ok(movies);
         }
 
-        [Authorize(Policy = "RequireModeratorRole")]
         [HttpGet("GetGenre/{genreId}")]
         public async Task<ActionResult<GenreOutputDto>> GetGenre(int genreId)
         {

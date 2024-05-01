@@ -11,5 +11,7 @@ namespace API.DTOs.Movies.Movie
         public string Status { get; set; }
         public int CertificationId { get; set; }
         public List<int> GenreIds { get; set; }
+        public int DirectorId { get; set; }
+        public List<int> ActorIds { get; set; }
     }
 }

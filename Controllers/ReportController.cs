@@ -1,4 +1,5 @@
-﻿using API.DTOs.Reports;
+﻿using API.DTOs.Points;
+using API.DTOs.Reports;
 using API.Entities;
 using API.Extentions;
 using API.Helpers.Params;
@@ -12,10 +13,12 @@ namespace API.Controllers
     public class ReportController : BaseApiController
     {
         private readonly IReportRepository _reportRepository;
+        private readonly IUserRepository _userRepository;
 
-        public ReportController(IReportRepository reportRepository)
+        public ReportController(IReportRepository reportRepository, IUserRepository userRepository)
         {
             _reportRepository = reportRepository;
+            _userRepository = userRepository;
         }
 
         [HttpPost("CreateReport")]

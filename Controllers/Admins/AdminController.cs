@@ -1,5 +1,6 @@
 ﻿using API.DTOs.Admin;
 using API.DTOs.Movies.Ratings;
+using API.DTOs.Points;
 using API.DTOs.Reports;
 using API.Entities;
 using API.Entities.Movies;
@@ -23,16 +24,18 @@ namespace API.Controllers.Admins
         private readonly IReportRepository _reportRepository;
         private readonly IRatingRepository _ratingRepository;
         private readonly IStatisticsRepository _statisticsRepository;
+        private readonly IUserRepository _userRepository;
 
         public AdminController(UserManager<AppUser> userManager, IMovieRepository movieRepository,
-            IReportRepository reportRepository, IRatingRepository ratingRepository, 
-            IStatisticsRepository statisticsRepository)
+            IReportRepository reportRepository, IRatingRepository ratingRepository,
+            IStatisticsRepository statisticsRepository, IUserRepository userRepository)
         {
             _userManager = userManager;
             _movieRepository = movieRepository;
             _reportRepository = reportRepository;
             _ratingRepository = ratingRepository;
             _statisticsRepository = statisticsRepository;
+            _userRepository = userRepository;
         }
 
         // Users
@@ -93,6 +96,7 @@ namespace API.Controllers.Admins
         }
 
         #endregion
+
         #region GetMovie
         [Authorize(Policy = "RequireModeratorRole")]
         [HttpGet("movie/{movieId}")]
@@ -102,6 +106,7 @@ namespace API.Controllers.Admins
             return Ok(await _movieRepository.GetMovieByIdForEdit(movieId));
         }
         #endregion
+
         [Authorize(Policy = "RequireModeratorRole")]
         [HttpDelete("DeleteRating")]
         public async Task<ActionResult> DeleteRating(int userId, int movieId)
@@ -112,6 +117,15 @@ namespace API.Controllers.Admins
             rating.IsDeleted = true;
             rating.DeletedAt = DateTime.Now;
             rating.DeletedId = User.GetUserId();
+
+            var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
+            var pointsTran = new PointTransactionInputDto
+            {
+                UserId = userId,
+                PointsChange = -100,
+                Description = $"Serious violation comment and deleted when rating the movie: \"{movie.Title}\""
+            };
+            await _userRepository.UpdateContributionPoints(pointsTran);
 
             _ratingRepository.RemoveRating(rating);
             if (await _ratingRepository.Save()) return Ok();
@@ -125,11 +139,23 @@ namespace API.Controllers.Admins
         {
             var rating = await _ratingRepository.GetRatingForEdit(movieId, userId);
             if (rating == null) return BadRequest();
-            if (rating.RatingViolation == true) return Ok();
+            if (rating.RatingViolation == true) return BadRequest("Ratings have been marked as violations");
             else rating.RatingViolation = true;
 
             _ratingRepository.EditRating(rating);
-            if (await _ratingRepository.Save()) return Ok();
+            if (await _ratingRepository.Save())
+            {
+                var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
+
+                var pointsTran = new PointTransactionInputDto
+                {
+                    UserId = userId,
+                    PointsChange = -50,
+                    Description = $"Violation of community standards when rating the movie: \"{movie.Title}\""
+                };
+                await _userRepository.UpdateContributionPoints(pointsTran);
+                return Ok();
+            }
 
             return BadRequest("Failed to update status rating");
         }
@@ -140,6 +166,7 @@ namespace API.Controllers.Admins
         {
             var rating = await _ratingRepository.GetRating(movieId, userId);
             if (rating == null) return BadRequest("Rating is deleted");
+
             return Ok(rating);
         }
 

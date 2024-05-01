@@ -2,12 +2,15 @@
 using API.DTOs.Movies.Movie;
 using API.DTOs.Photos;
 using API.Entities.Movies;
+using API.Entities.Movies.Persons;
 using API.Entities.Users;
 using API.Extentions;
 using API.Helpers.Params;
 using API.Helpers.Params.Movies;
 using API.Interfaces;
 using API.Interfaces.Movies;
+using API.Interfaces.Movies.Persons;
+using API.Repositories.Movies.Persons;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +25,12 @@ namespace API.Controllers.Movies
         private readonly IRatingRepository _ratingRepository;
         private readonly IWatchlistRepository _watchlistRepository;
         private readonly IRecommendMovieService _recommendMovieService;
+        private readonly IActorReponsitory _actorReponsitory;
 
         public MovieController(IMovieRepository movieRepository, IMapper mapper,
             IPhotoService photoService, IRatingRepository ratingRepository,
-            IWatchlistRepository watchlistRepository, IRecommendMovieService recommendMovieService)
+            IWatchlistRepository watchlistRepository, IRecommendMovieService recommendMovieService,
+            IActorReponsitory actorReponsitory)
         {
             _movieRepository = movieRepository;
             _mapper = mapper;
@@ -33,6 +38,7 @@ namespace API.Controllers.Movies
             _ratingRepository = ratingRepository;
             _watchlistRepository = watchlistRepository;
             _recommendMovieService = recommendMovieService;
+            _actorReponsitory = actorReponsitory;
         }
         #region CreateMovie
         [Authorize]
@@ -55,9 +61,12 @@ namespace API.Controllers.Movies
                 CreatedId = User.GetUserId(),
                 CreatedAt = DateTime.Now,
                 CertificationId = movieCreate.CertificationId,
+                DirectorId = movieCreate.DirectorId,
                 Banner = banner,
                 MovieGenres = movieCreate.GenreIds
                     .Select(genreId => new MovieGenre { GenreId = genreId }).ToList(),
+                MovieActors = movieCreate.ActorIds
+                    .Select(actorId => new MovieActor { ActorId = actorId}).ToList(),
             };
 
             newMovie.Banner.MovieId = newMovie.Id;
@@ -65,8 +74,8 @@ namespace API.Controllers.Movies
             _mapper.Map(movieCreate, newMovie);
             _movieRepository.CreateMovie(newMovie);
 
-            await _movieRepository.Save();
-            return Ok(newMovie.Id);
+            if(await _movieRepository.Save()) return Ok(newMovie.Id);
+            return BadRequest("Failed to create new movie");
         }
         #endregion
 
@@ -82,6 +91,12 @@ namespace API.Controllers.Movies
             movie.UpdatedAt = DateTime.Now;
             movie.UpdatedId = User.GetUserId();
             movie.MovieGenres.Clear();
+            movie.MovieActors.Clear();
+
+            foreach (var actorId in movieUpdate.ActorIds)
+            {
+                movie.MovieActors.Add(new MovieActor { MovieId = movie.Id, ActorId = actorId });
+            }
 
             foreach (var genreId in movieUpdate.GenreIds)
             {
@@ -121,10 +136,13 @@ namespace API.Controllers.Movies
         {
             var movie = await _movieRepository.GetMovieById(movieId);
             if (movie == null) return NotFound();
+            ratingParams.RatingViolation = true;
             var rating = await _ratingRepository.GetListRatings(movieId, ratingParams);
             movie.Genres = await _movieRepository.GetListGenresByMovieId(movieId);
+            movie.Actors = await _actorReponsitory.GetListActorsByMovieId(movieId);
             movie.TotalRatings = rating.Count();
             movie.AverageRating = rating.CalculateRatingScore();
+            movie.IsInWatchlist = User.Identity.IsAuthenticated ? await _watchlistRepository.ExistWatchlistItem(User.GetUserId(), movieId) : false;
             return Ok(movie);
         }
         #endregion
@@ -170,10 +188,11 @@ namespace API.Controllers.Movies
             if (file == null) return BadRequest("File image invalid");
             var movie = await _movieRepository.GetMovieByIdForEdit(movieId);
             if (movie == null) return NotFound();
-            if (movie.Banner.PublicId != null || movie.Banner.PublicId != "default_banner")
-            {
-                await _photoService.DeletePhoto(movie.Banner.PublicId);
-            }
+
+            //if (movie.Banner.PublicId != null || movie.Banner.PublicId != "default_banner")
+            //{
+            //    await _photoService.DeletePhoto(movie.Banner.PublicId);
+            //}
 
             var result = await _photoService.AddPhoto(file);
 

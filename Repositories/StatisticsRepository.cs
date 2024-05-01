@@ -18,6 +18,10 @@ namespace API.Repositories
         {
             var statistics = new StatisticsDto();
 
+            statistics.TotalActors = await _dataContext.Actors
+                .Where(a => a.IsDeleted == false).CountAsync();
+            statistics.TotalDirectors = await _dataContext.Directors
+                .Where(d => d.IsDeleted == false).CountAsync();
             statistics.TotalUsers = await _dataContext.Users.CountAsync();
             statistics.TotalMovies = await _dataContext.Movies
                 .Where(m => m.IsDeleted == false)

@@ -34,8 +34,9 @@ namespace API.Controllers.Movies
             var certis = await _certificationRepository.GetListCertifications();
             return Ok(certis);
         }
-        [Authorize(Policy = "RequireModeratorRole")]
+
         #region CreateOrEditCertifi
+        [Authorize(Policy = "RequireModeratorRole")]
         [HttpPost("CreateOrEditCertifi/{certiId}")]
         public async Task<ActionResult> CreateCertifi(int certiId,
             [FromBody] CertificationCreateOrEditDto certificationCreateOrEdit)

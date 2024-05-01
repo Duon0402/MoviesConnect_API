@@ -3,6 +3,6 @@
     public class RatingParams
     {
         public int? Score { get; set; }
-        public bool? RatingViolation { get; set; }
+        public bool? RatingViolation { get; set; } = false;
     }
 }

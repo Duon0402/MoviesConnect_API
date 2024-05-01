@@ -3,6 +3,8 @@
     public class StatisticsDto
     {
         public int TotalMovies { get; set; }
+        public int TotalActors { get; set; }
+        public int TotalDirectors { get; set; }
         public int TotalUsers { get; set; }
         public int TotalReports { get; set; }
         public int TotalReportUnprocesseds {  get; set; }

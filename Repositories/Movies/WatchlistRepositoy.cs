@@ -46,7 +46,7 @@ namespace API.Repositories.Movies
 
                     IsInWatchList = _dataContext.Watchlists
                         .Any(x => x.MovieId == wl.Movie.Id && x.AppUserId == currentUserId),
-                    BannerOutput = _mapper.Map<BannerDto>(wl.Movie.Banner)
+                    Banner = _mapper.Map<BannerDto>(wl.Movie.Banner)
                 })
                 .ToListAsync();
         }

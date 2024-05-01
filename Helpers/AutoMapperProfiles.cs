@@ -1,14 +1,19 @@
 ﻿using API.DTOs.Accounts;
+using API.DTOs.Movies.Actor;
 using API.DTOs.Movies.Certifications;
+using API.DTOs.Movies.Directors;
 using API.DTOs.Movies.Genres;
 using API.DTOs.Movies.Movie;
 using API.DTOs.Movies.Ratings;
 using API.DTOs.Photos;
+using API.DTOs.Points;
 using API.DTOs.Reports;
 using API.DTOs.Users;
 using API.DTOs.Users.Member;
+using API.DTOs.Vouchers;
 using API.Entities;
 using API.Entities.Movies;
+using API.Entities.Movies.Persons;
 using API.Entities.Users;
 using AutoMapper;
 
@@ -18,6 +23,18 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
+            //vouchers
+            CreateMap<Voucher, VoucherOutputDto>().ReverseMap();
+
+            // persons
+            CreateMap<Actor, ActorOutputDto>().ReverseMap();
+            CreateMap<Actor, ActorInputDto>().ReverseMap();
+            CreateMap<Director, DirectorInputDto>().ReverseMap();
+            CreateMap<Director, DirectorOutputDto>().ReverseMap();
+
+            // points
+            CreateMap<PointTransaction, PointTransactionInputDto>().ReverseMap();
+
             // report
             CreateMap<Report, ReportDto>().ReverseMap();
 
